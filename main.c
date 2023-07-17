@@ -170,7 +170,7 @@ void	draw_square(t_mlx *mlx, int x, int y, int color)
 	int		square_size;
 
 	i = 0;
-	square_size = 64;
+	square_size = TILE_LEN;
 	while (i < square_size - 1)
 	{
 		j = 0;
@@ -231,8 +231,8 @@ double		*get_player_position(char **map)
 
 void	get_player_center(t_mlx *mlx)
 {
-	mlx->player->player_center_x = (mlx->player->player_x * 64) + 32 + mlx->player->move_player_x;
-	mlx->player->player_center_y = (mlx->player->player_y * 64) + 32 + mlx->player->move_player_y;
+	mlx->player->player_center_x = mlx->player->player_x + TILE_LEN /2;
+	mlx->player->player_center_y = mlx->player->player_y + TILE_LEN /2;
 }
 
 void draw_line(t_mlx *mlx, int x1, int y1, int x2, int y2, int color)
@@ -251,6 +251,7 @@ void draw_line(t_mlx *mlx, int x1, int y1, int x2, int y2, int color)
         x += xIncrement;
         y += yIncrement;
     }
+
 }
 
 
@@ -261,23 +262,24 @@ void	draw_player(t_mlx *mlx, int color)
 	int			j;
 
 	player_square_size = 8;
-	mlx->player->offset = (64 - player_square_size) / 2;
+	mlx->player->offset = (TILE_LEN - player_square_size) / 2;
 	i = 0;
 	while (i < player_square_size)
 	{
 		j = 0;
 		while (j < player_square_size)
 		{
-			my_mlx_pixel_put(&mlx->img, (mlx->player->player_x * 64) + i + mlx->player->offset + mlx->player->move_player_x, \
-			(mlx->player->player_y * 64) + j + mlx->player->offset + mlx->player->move_player_y, color);
+			my_mlx_pixel_put(&mlx->img, mlx->player->player_x + i + mlx->player->offset, \
+			mlx->player->player_y + j + mlx->player->offset, color);
 			j++;
 		}
-		i++;		
+		i++;
 	}
+	get_player_center(mlx);
 	int line_length = 30; // Adjust the line length as needed
-    int line_end_x = (mlx->player->player_x * 64) + 32 + line_length * cos(mlx->player->player_angle) + mlx->player->move_player_x;
-    int line_end_y = (mlx->player->player_y * 64) + 32 + line_length * sin(mlx->player->player_angle) + mlx->player->move_player_y;
-    draw_line(mlx, (mlx->player->player_x * 64) + 32 + mlx->player->move_player_x, (mlx->player->player_y * 64) + 32 + mlx->player->move_player_y, line_end_x, line_end_y, 0x00FF00);
+    int line_end_x = mlx->player->player_center_x  + line_length * cos(mlx->player->player_angle);
+    int line_end_y = mlx->player->player_center_y + line_length * sin(mlx->player->player_angle);
+    draw_line(mlx, mlx->player->player_center_x , mlx->player->player_center_y, line_end_x, line_end_y, 0xfffb00);
 }
 
 void	draw_black_screen(t_mlx *mlx)
@@ -286,10 +288,10 @@ void	draw_black_screen(t_mlx *mlx)
 	int		y;
 
 	y = 0;
-	while (y < mlx->vars->map_h * 64)
+	while (y < mlx->vars->map_h * TILE_LEN)
 	{
 		x = 0;
-		while (x < mlx->vars->map_w * 64)
+		while (x < mlx->vars->map_w * TILE_LEN)
 		{
 			my_mlx_pixel_put(&mlx->img, x, y, 0x000000);
 			x++;
@@ -298,6 +300,7 @@ void	draw_black_screen(t_mlx *mlx)
 	}
 }
 
+//  render 
 int	 magic(t_mlx *mlx)
 {
 	int		x;
@@ -314,49 +317,58 @@ int	 magic(t_mlx *mlx)
 		while (x < mlx->vars->map_w)
 		{
 			if (mlx->pars->map[y][x] == '1')
-				color = 0xFF8066;
+				color = 0x943a5b;
 			else if (mlx->pars->map[y][x] == ' ')
 				color = 0x000000;
 			else if (mlx->pars->map[y][x] == '0')
-				color = 0xFFFFFF;
+				color = 0x4f81ff;
 			else if (mlx->pars->map[y][x] == '\0')
 				color = 0x000000;
 			else
-				color = 0xFFFFFF;
+				color = 0x4f81ff;
 			draw_square(mlx, x, y, color);
 			x++;
 		}
 		y++;
 	}
-	draw_player(mlx, 7845562);
+	draw_player(mlx, 0xff0000);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
 	return (0);
 }
 
 int control_key(int keycode, t_mlx *mlx)
 {
-    double moveSpeed = 5;
-    double rotateSpeed = 0.05;
+    double moveSpeed = MOVE_SPEED;
+    double rotateSpeed = ROT_SPEED;
+	double old_x;
+	double old_y;
+
+	old_x = mlx->player->player_x;
+	old_y = mlx->player->player_y;
 
     if (keycode == KEY_W)
     {
-        mlx->player->move_player_x += moveSpeed * cos(mlx->player->player_angle);
-        mlx->player->move_player_y += moveSpeed * sin(mlx->player->player_angle);
-    }
-    else if (keycode == KEY_S)
+		if (mlx->pars->map[(int)(mlx->player->player_y + 31 + moveSpeed * sin(mlx->player->player_angle)) / (int)TILE_LEN]\
+		[(int)(mlx->player->player_x + 32 + moveSpeed * cos(mlx->player->player_angle)) / (int)TILE_LEN] != '1')
+		{
+			mlx->player->player_x += moveSpeed * cos(mlx->player->player_angle);
+			mlx->player->player_y += moveSpeed * sin(mlx->player->player_angle);
+		}
+	}	
+	else if (keycode == KEY_S)
     {
-        mlx->player->move_player_x -= moveSpeed * cos(mlx->player->player_angle);
-        mlx->player->move_player_y -= moveSpeed * sin(mlx->player->player_angle);
+        mlx->player->player_x -= moveSpeed * cos(mlx->player->player_angle);
+        mlx->player->player_y -= moveSpeed * sin(mlx->player->player_angle);
     }
     else if (keycode == KEY_A)
     {
-        mlx->player->move_player_x += moveSpeed * sin(mlx->player->player_angle);
-        mlx->player->move_player_y -= moveSpeed * cos(mlx->player->player_angle);
+        mlx->player->player_x += moveSpeed * sin(mlx->player->player_angle);
+        mlx->player->player_y -= moveSpeed * cos(mlx->player->player_angle);
     }
     else if (keycode == KEY_D)
     {
-        mlx->player->move_player_x -= moveSpeed * sin(mlx->player->player_angle);
-        mlx->player->move_player_y += moveSpeed * cos(mlx->player->player_angle);
+        mlx->player->player_x -= moveSpeed * sin(mlx->player->player_angle);
+        mlx->player->player_y += moveSpeed * cos(mlx->player->player_angle);
     }
     else if (keycode == KEY_LEFT)
     {
@@ -369,7 +381,7 @@ int control_key(int keycode, t_mlx *mlx)
         mlx->player->player_angle += rotateSpeed;
         if (mlx->player->player_angle >= 2 * M_PI)
             mlx->player->player_angle -= 2 * M_PI;
-    }
+	}
     if (keycode == 53)
         exit(0);
     return 0;
@@ -425,15 +437,15 @@ int main(int ac, char **av)
 	get_map_w_h(vars, mlx->pars);
 	mlx->vars = vars;
 	arr = get_player_position(mlx->pars->map);
-	mlx->player->player_y = arr[0];
-	mlx->player->player_x = arr[1];
+	mlx->player->player_y = arr[0] * TILE_LEN;
+	mlx->player->player_x = arr[1] * TILE_LEN;
 	free(arr);
 	get_player_direction(mlx);
 	get_player_angle(mlx);
-	mlx->height = mlx->vars->map_h * 64;
-	mlx->width = mlx->vars->map_w * 64;
-	mlx->player->move_player_x = 0.0;
-	mlx->player->move_player_y = 0.0;
+	mlx->height = mlx->vars->map_h * TILE_LEN;
+	mlx->width = mlx->vars->map_w * TILE_LEN;
+	// mlx->player->player_x = 0.0;
+	// mlx->player->player_y = 0.0;
 /***********************                         ***************************/
 	mlx->mlx = mlx_init();
 	mlx->win = mlx_new_window(mlx->mlx, mlx->width, mlx->height, "cub3D");

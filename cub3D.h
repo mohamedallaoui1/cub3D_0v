@@ -21,6 +21,8 @@
 # include <mlx.h>
 #include <math.h>
 
+#define MOVE_SPEED 10
+#define ROT_SPEED 0.2
 
 # define KEY_W 13
 # define KEY_S 1 
@@ -28,6 +30,7 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
+# define TILE_LEN 64.0
 # define MIN (a, b) (((a) < (b)) ? (a) : (b))
 # define MAX (a, b) ((a) > (b) ? (a) : (b))
 

@@ -40,10 +40,10 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
-# define TILE_LEN 32.0
+# define TILE_LEN 64.0
 
-#define NUM_RAYS 120
-#define FOV_ANGLE 70 * (M_PI / 180)
+#define NUM_RAYS 180
+#define FOV_ANGLE 60 * (M_PI / 180)
 
 
 typedef struct s_pars

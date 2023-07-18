@@ -235,6 +235,7 @@ void	get_player_center(t_mlx *mlx)
 	mlx->player->player_center_y = mlx->player->player_y + TILE_LEN /2;
 }
 
+// 12, 15         25, 9
 void draw_line(t_mlx *mlx, int x1, int y1, int x2, int y2, int color)
 {
     int dx;
@@ -256,24 +257,14 @@ void draw_line(t_mlx *mlx, int x1, int y1, int x2, int y2, int color)
     yIncrement = (float)dy / (float)steps;
     x = x1;
     y = y1;
-
+	// steps is the highest value between dx and dy   
 	i = 0;
-	while (i++ <= steps)
+	while (mlx->pars->map[(int)(y / TILE_LEN)][(int)(x / TILE_LEN)] != '1')
     {
         my_mlx_pixel_put(&mlx->img, (int)x, (int)y, color);
         x += xIncrement;
         y += yIncrement;
     }
-}
-
-int	*get_last_hit_x(t_mlx *mlx)
-{
-
-}
-
-int	*get_last_hit_y(t_mlx *mlx)
-{
-
 }
 
 void CastRays(t_mlx *mlx)
@@ -310,7 +301,7 @@ void	draw_player(t_mlx *mlx, int color)
 	get_player_center(mlx);
     line_end_x = mlx->player->player_center_x  + LINE_LEN * cos(mlx->player->player_angle);
 	line_end_y = mlx->player->player_center_y + LINE_LEN * sin(mlx->player->player_angle);
-    draw_line(mlx, mlx->player->player_center_x , mlx->player->player_center_y, line_end_x, line_end_y, LINE_COLOR);
+    // draw_line(mlx, mlx->player->player_center_x , mlx->player->player_center_y, line_end_x, line_end_y, LINE_COLOR);
 	CastRays(mlx);
 	i = 0;
 	while (i < player_square_size)

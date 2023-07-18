@@ -21,8 +21,18 @@
 # include <mlx.h>
 #include <math.h>
 
-#define MOVE_SPEED 10
-#define ROT_SPEED 0.2
+#define MOVE_SPEED 3
+#define ROT_SPEED 0.05
+#define LINE_LEN 30
+
+#define LINE_COLOR 0xfff
+#define PLAYER_COLOR 0xff0000
+#define WALL_COLOR 0x943a5b
+#define SPACE_COLOR 0x000000
+#define GROUND_COLOR 0xffffff
+
+#define RIGHT -1
+#define LEFT  1
 
 # define KEY_W 13
 # define KEY_S 1 
@@ -30,74 +40,83 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
-# define TILE_LEN 64.0
-# define MIN (a, b) (((a) < (b)) ? (a) : (b))
-# define MAX (a, b) ((a) > (b) ? (a) : (b))
+# define TILE_LEN 32.0
+
+#define NUM_RAYS 120
+#define FOV_ANGLE 70 * (M_PI / 180)
 
 
 typedef struct s_pars
 {
-    char    *no;
-    char    *so;
-    char    *we;
-    char    *ea;
-    int     *f_rgb;
-    int     *c_rgb;
-    char    **map;
+	char    *no;
+	char    *so;
+	char    *we;
+	char    *ea;
+	int     *f_rgb;
+	int     *c_rgb;
+	char    **map;
 }           t_pars;
 
 
 
 typedef struct s_data
 {
-    void    *img;
-    char    *addr;
-    int     bits_per_pixel;
-    int     line_length;
-    int     endian;
+	void    *img;
+	char    *addr;
+	int     bits_per_pixel;
+	int     line_length;
+	int     endian;
 }           t_data;
 
 
 
 typedef struct s_vars
 {
-    int     map_w;
-    int     map_h;
+	int     map_w;
+	int     map_h;
 }           t_vars;
 
 
 
 typedef struct s_player
 {
-    double  player_x;
-    double  player_y;
-    double  player_angle;
-    double  offset;
-    double  move_player_x;
-    double  move_player_y;
-    double  player_center_x;
-    double  player_center_y;
-    char    player_direction;
+	double  player_x;
+	double  player_y;
+	double  player_angle;
+	double  offset;
+	double  move_player_x;
+	double  move_player_y;
+	double  player_center_x;
+	double  player_center_y;
+	char    player_direction;
+	int     key_w;
+	int     key_s;
+	int     key_a;
+	int     key_d;
+	int     key_left;
+	int     key_right;
+	int		direction_forward;
+	int		direction_side;
 }               t_player;
 
 
 
 typedef struct s_mlx
 {
-    void    *mlx;
-    void    *win;
-    int  width;
-    int  height;
-    t_data  img;
-    t_pars  *pars;
-    t_vars  *vars;
-    t_player *player;
+	void    *mlx;
+	void    *win;
+	int  width;
+	int  height;
+	t_data  img;
+	t_pars  *pars;
+	t_vars  *vars;
+	t_player *player;
 }           t_mlx;
 
 
-void    texture_parsing(t_pars *pars, char **file);
-void    error(char *str);
-void    map_pars(t_pars *pars, char **file);
-void    color_pars(t_pars *pars, char **file);
-
+void	texture_parsing(t_pars *pars, char **file);
+void	error(char *str);
+void	map_pars(t_pars *pars, char **file);
+void	color_pars(t_pars *pars, char **file);
+int		is_player(char c);
 #endif

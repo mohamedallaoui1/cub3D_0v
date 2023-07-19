@@ -21,7 +21,7 @@
 # include <mlx.h>
 #include <math.h>
 
-#define MOVE_SPEED 3
+#define MOVE_SPEED 5
 #define ROT_SPEED 0.05
 #define LINE_LEN 30
 
@@ -42,7 +42,7 @@
 # define KEY_RIGHT 124
 # define TILE_LEN 64.0
 
-#define NUM_RAYS 180
+#define NUM_RAYS 320
 #define FOV_ANGLE 60 * (M_PI / 180)
 
 
@@ -63,7 +63,7 @@ typedef struct s_data
 {
 	void    *img;
 	char    *addr;
-	int     bits_per_pixel;
+	int     bits_per_M_PIxel;
 	int     line_length;
 	int     endian;
 }           t_data;
@@ -76,7 +76,14 @@ typedef struct s_vars
 	int     map_h;
 }           t_vars;
 
-
+typedef struct s_rays
+{
+	int	 ray_id;
+	double ray_angle;
+	double wall_hit_x;
+	double wall_hit_y;
+	double distance;
+}			t_rays;
 
 typedef struct s_player
 {
@@ -97,6 +104,7 @@ typedef struct s_player
 	int     key_right;
 	int		direction_forward;
 	int		direction_side;
+	t_rays	*rays;
 }               t_player;
 
 
@@ -119,4 +127,5 @@ void	error(char *str);
 void	map_pars(t_pars *pars, char **file);
 void	color_pars(t_pars *pars, char **file);
 int		is_player(char c);
+double normalize_angle(double angle);
 #endif

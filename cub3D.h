@@ -21,8 +21,8 @@
 # include <mlx.h>
 #include <math.h>
 
-#define MOVE_SPEED 5
-#define ROT_SPEED 0.05
+#define MOVE_SPEED 7
+#define ROT_SPEED 0.1
 #define LINE_LEN 30
 
 #define LINE_COLOR 0xfff
@@ -31,8 +31,8 @@
 #define SPACE_COLOR 0x000000
 #define GROUND_COLOR 0xffffff
 
-#define RIGHT -1
-#define LEFT  1
+#define RIGHT 1
+#define LEFT  -1
 
 # define KEY_W 13
 # define KEY_S 1 
@@ -41,6 +41,7 @@
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
 # define TILE_LEN 64.0
+#define PHI 1.618
 
 #define NUM_RAYS 320
 #define FOV_ANGLE 60 * (M_PI / 180)
@@ -58,6 +59,11 @@ typedef struct s_pars
 }           t_pars;
 
 
+typedef struct s_vector
+{
+	double	x;
+	double	y;
+}			t_vector;
 
 typedef struct s_data
 {
@@ -79,11 +85,19 @@ typedef struct s_vars
 typedef struct s_rays
 {
 	int	 ray_id;
+	double x;
+	double y;
 	double ray_angle;
-	double wall_hit_x;
-	double wall_hit_y;
 	double distance;
 }			t_rays;
+
+// typedef struct s_dir
+// {
+// 	int	x;
+// 	int	y;
+// 	double vectorx;
+// 	double vectory;
+// }			t_dir;
 
 typedef struct s_player
 {
@@ -102,8 +116,12 @@ typedef struct s_player
 	int     key_d;
 	int     key_left;
 	int     key_right;
-	int		direction_forward;
-	int		direction_side;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
+	int		direction_ws;
+	int		direction_ad;
 	t_rays	*rays;
 }               t_player;
 
@@ -127,5 +145,6 @@ void	error(char *str);
 void	map_pars(t_pars *pars, char **file);
 void	color_pars(t_pars *pars, char **file);
 int		is_player(char c);
-double normalize_angle(double angle);
+void	ray_casting(t_mlx *mlx);
+void	update_angle(t_mlx *mlx);
 #endif

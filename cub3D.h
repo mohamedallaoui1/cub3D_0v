@@ -21,7 +21,7 @@
 # include <mlx.h>
 #include <math.h>
 
-#define MOVE_SPEED 7
+#define MOVE_SPEED 0.1
 #define ROT_SPEED 0.1
 #define LINE_LEN 30
 
@@ -43,8 +43,7 @@
 # define TILE_LEN 64.0
 #define PHI 1.618
 
-#define NUM_RAYS 320
-#define FOV_ANGLE 60 * (M_PI / 180)
+#define FOV_ANGLE 66 * (M_PI / 180)
 
 
 typedef struct s_pars
@@ -99,23 +98,24 @@ typedef struct s_rays
 // 	double vectory;
 // }			t_dir;
 
+typedef struct s_keys
+{
+	int	key_w;
+	int	key_s;
+	int	key_a;
+	int	key_d;
+	int	key_left;
+	int	key_right;
+}		t_keys;
 typedef struct s_player
 {
-	double  player_x;
-	double  player_y;
-	double  player_angle;
+	double  px;
+	double  py;
 	double  offset;
-	double  move_player_x;
-	double  move_player_y;
 	double  player_center_x;
 	double  player_center_y;
 	char    player_direction;
-	int     key_w;
-	int     key_s;
-	int     key_a;
-	int     key_d;
-	int     key_left;
-	int     key_right;
+	t_keys	keys;
 	double	dir_x;
 	double	dir_y;
 	double	plane_x;

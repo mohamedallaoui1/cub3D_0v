@@ -267,21 +267,62 @@ void draw_line(t_mlx *mlx, double x1, double y1, double x2, double y2)
     }
 }
 
-void	dir_next_grid(t_mlx *mlx, double *x, double *y)
+void	dda(t_mlx *mlx, double *x, double *y, t_vector	ray_dir)
 {
-	t_vector	dir;
+	t_vector	sideDist;
+	t_vector	deltaDist;
+	t_vector	step;
+	double 		perpWallDist;
+	t_vector	map_cord;
+	// double	dx;
+	// double 	dy;
+	map_cord.x = (int)mlx->player->px;
+	map_cord.y = (int)mlx->player->py;
+	deltaDist.x = 1 / fabs(ray_dir.x);
+	deltaDist.y = 1 / fabs(ray_dir.y);
 
-	if (mlx->player->dir_x < 0)
+	sideDist.x = deltaDist.x * ray_dir.x;
+	sideDist.y = deltaDist.y * ray_dir.y;
+	step.x = 0;
+	step.y = 0;
+	while (mlx->pars->map[(int)map_cord.y][(int)map_cord.x] == '0')
 	{
-		*x = -1;
-		dir.x = floor(mlx->player->dir_x);
+		if (ray_dir.x < 0)
+		{
+			step.x = -1;
+			sideDist.x = (mlx->player->px - map_cord.x) * deltaDist.x;
+		}
+		else
+		{
+			step.x = 1;
+			sideDist.x = (map_cord.x + 1.0 - mlx->player->px) * deltaDist.x;
+		}
+		if (ray_dir.y < 0)
+		{
+			step.y = -1;
+			sideDist.y = (mlx->player->py - map_cord.y) * deltaDist.y;
+		}
+		else
+		{
+			step.y = 1;
+			sideDist.y = (map_cord.y + 1.0 - mlx->player->py) * deltaDist.y;
+		}
+		map_cord.x += step.x;
+		map_cord.y += step.y;
+	}
+	if (sideDist.x < sideDist.y)
+	{
+		sideDist.x += deltaDist.x;
+		map_cord.x += step.x;
 	}
 	else
 	{
-		*x = 0;
-		dir.x = ceil(mlx->player->dir_x);
+		sideDist.y += deltaDist.y;
+		map_cord.y += step.y;
 	}
-	*y = mlx->player->dir_y;
+	perpWallDist = sqrt(pow((map_cord.x - mlx->player->px), 2) + pow((map_cord.y - mlx->player->py), 2));
+	*x = map_cord.x;
+	*y = map_cord.y;
 }
 
 void	ray_casting(t_mlx *mlx)
@@ -299,18 +340,21 @@ void	ray_casting(t_mlx *mlx)
 	// exit(0);
 	while (i <  mlx->width)
 	{
-		dir_next_grid(mlx, &x, &y);
 		CameraX = (2 * i - (double)mlx->width) /  (double)mlx->width;
 		ray_dir.x = (mlx->player->px + 0.5) + mlx->player->dir_x + mlx->player->plane_x * CameraX;
 		ray_dir.y = (mlx->player->py + 0.5) + mlx->player->dir_y + mlx->player->plane_y * CameraX;
+		dda(mlx, &x, &y, ray_dir);
 		// printf("index = %f, cam_x: %f\n", i, CameraX);
 		// printf("px = %f, ray_dir_x: %f\n", mlx->player->px, ray_dir.x);
 		// printf("py = %f, ray_dir_y: %f\n", mlx->player->py, ray_dir.y);
 		draw_line(mlx,
 			mlx->player->player_center_x,
 			mlx->player->player_center_y,
-			ray_dir.x * TILE_LEN,
-			ray_dir.y * TILE_LEN);
+			mlx->player->player_center_x + x * TILE_LEN,
+			mlx->player->player_center_y + y * TILE_LEN);
+			// ray_dir.x * TILE_LEN,
+			// ray_dir.y * TILE_LEN);
+		printf("x = %f, y = %f\n", x, y);
 		i++;
 	}
 }
@@ -329,7 +373,6 @@ void	draw_player(t_mlx *mlx, int color)
 	// 	mlx->player->player_center_x + LINE_LEN * cos(mlx->player->player_angle),
 	// 	mlx->player->player_center_y + LINE_LEN * sin(mlx->player->player_angle)
 	// , 0);
-	ray_casting(mlx);
 	i = 0;
 	while (i < player_square_size)
 	{
@@ -419,6 +462,7 @@ int	 magic(t_mlx *mlx)
 		}
 	}
 	draw_player(mlx, PLAYER_COLOR);
+	ray_casting(mlx);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
 	return (0);
 }

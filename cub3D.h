@@ -84,8 +84,9 @@ typedef struct s_vars
 typedef struct s_rays
 {
 	int	 ray_id;
-	double x;
-	double y;
+	t_vector ray_dir;
+	double map_x;
+	double map_y;
 	double ray_angle;
 	double distance;
 }			t_rays;
@@ -107,6 +108,7 @@ typedef struct s_keys
 	int	key_left;
 	int	key_right;
 }		t_keys;
+
 typedef struct s_player
 {
 	double  px;
@@ -124,8 +126,6 @@ typedef struct s_player
 	int		direction_ad;
 	t_rays	*rays;
 }               t_player;
-
-
 
 typedef struct s_mlx
 {

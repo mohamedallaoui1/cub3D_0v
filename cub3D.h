@@ -21,8 +21,8 @@
 # include <mlx.h>
 #include <math.h>
 
-#define MOVE_SPEED 5
-#define ROT_SPEED 0.05
+#define MOVE_SPEED 10
+#define ROT_SPEED 0.1
 #define LINE_LEN 30
 
 #define LINE_COLOR 0xfff
@@ -80,10 +80,24 @@ typedef struct s_rays
 {
 	int	 ray_id;
 	double ray_angle;
-	double wall_hit_x;
-	double wall_hit_y;
+	double hor_hit_x;
+	double hor_hit_y;
+	double vert_hit_x;
+	double vert_hit_y;
+	int	 is_ray_facing_up;
+	int	 is_ray_facing_down;
+	int	 is_ray_facing_left;
+	int	 is_ray_facing_right;
+	int	 found_horz_wall_hit;
+	int	 found_vert_wall_hit;
 	double distance;
 }			t_rays;
+
+typedef struct s_point
+{
+	double x;
+	double y;
+}				t_point;
 
 typedef struct s_player
 {
@@ -104,6 +118,8 @@ typedef struct s_player
 	int     key_right;
 	int		direction_forward;
 	int		direction_side;
+	double	dir_x;
+	double	dir_y;
 	t_rays	*rays;
 }               t_player;
 

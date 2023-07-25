@@ -237,84 +237,171 @@ void	get_player_center(t_mlx *mlx)
 	mlx->player->player_center_y = mlx->player->player_y + TILE_LEN /2;
 }
 
-void draw_line(t_mlx *mlx, int x1, int y1, int x2, int y2, int index)
+void draw_line(t_mlx *mlx, t_point point1, t_point point2, int index)
 {
-    int dx;
-    int dy;
-    int steps;
-    float xIncrement;
-    float yIncrement;
-    float x;
-	int	i;
-    float y;
-    
-	dx = x2 - x1;
-    dy = y2 - y1;
-    if (abs(dx) > abs(dy))
-		steps = abs(dx);
+	double	x;
+	double	y;
+	double	step;
+	double	i;
+	double	j;
+
+	x = point1.x;
+	y = point1.y;
+	step = 1;
+	if (fabs(point2.x - point1.x) >= fabs(point2.y - point1.y))
+		step = fabs(point2.x - point1.x);
 	else
-		steps = abs(dy);
-    xIncrement = (float)dx / (float)steps;
-    yIncrement = (float)dy / (float)steps;
-    x = x1;
-    y = y1;
-	i = -1;
-	// steps is the highest value between dx and dy (the number of steps to draw the line)
-	// while (++i <= steps)
-	while (mlx->pars->map[(int)(y / TILE_LEN)][(int)(x / TILE_LEN)] != '1')
-    {
-        my_mlx_pixel_put(mlx, (int)x, (int)y, LINE_COLOR);
-        x += xIncrement;
-        y += yIncrement;
-    }
-	mlx->player->rays[index].wall_hit_x = x;
-	mlx->player->rays[index].wall_hit_y = y;
-	mlx->player->rays[index].distance = sqrt(fabs((mlx->player->player_center_x - x))
-			* fabs(mlx->player->player_center_x - x) 
-			+ fabs(mlx->player->player_center_y - y) * fabs(mlx->player->player_center_y - y)
-		);
+		step = fabs(point2.y - point1.y);
+	i = (point2.x - point1.x) / step;
+	j = (point2.y - point1.y) / step;
+	mlx->player->rays[index].distance = step;
+	while (step > 0)
+	{
+		my_mlx_pixel_put(mlx, x, y, LINE_COLOR);
+		x += i;
+		y += j;
+		step--;
+	}
 }
 
 double normalize_angle(double angle)
 {
-	if (angle > 2 * M_PI)
-		angle -= 2 * M_PI;
+	angle = remainder(angle, 2 * M_PI);
 	if (angle < 0)
-		angle += 2 * M_PI;
+		angle = 2 * M_PI + angle;
 	return (angle);
+}
+
+void	find_vertical(t_mlx *mlx, int id)
+{
+	t_point	intercept;
+	t_point	delta;
+
+	intercept.x = floor(mlx->player->player_center_x / TILE_LEN) * TILE_LEN;
+	intercept.x += TILE_LEN * (mlx->player->rays[id].is_ray_facing_right);
+	intercept.y = mlx->player->player_center_y + (intercept.x - mlx->player->player_center_x) * tan(mlx->player->rays[id].ray_angle);
+	delta.x = TILE_LEN;
+	if (mlx->player->rays[id].is_ray_facing_left)
+		delta.x *= -1;
+	else
+		delta.x *= 1;
+	delta.y = fabs(TILE_LEN * tan(mlx->player->rays[id].ray_angle));
+	if (mlx->player->rays[id].is_ray_facing_up)
+		delta.y *= -1;
+	else
+		delta.y *= 1;
+
+	if (mlx->player->rays[id].is_ray_facing_left)
+		intercept.x--;
+	while (intercept.x >= 0 && intercept.x <= mlx->width && intercept.y >= 0 && intercept.y <= mlx->height)
+	{
+		if (mlx->pars->map[(int)(intercept.y / TILE_LEN)][(int)(intercept.x / TILE_LEN)] == '1')
+		{
+			mlx->player->rays[id].found_vert_wall_hit = 1;
+			mlx->player->rays[id].vert_hit_x = intercept.x;
+			mlx->player->rays[id].vert_hit_y = intercept.y; 
+			return ;
+		}
+		else
+		{
+			intercept.x += delta.x;
+			intercept.y += delta.y;
+		}
+	}
+}
+
+void	find_horizontal(t_mlx *mlx, int id)
+{
+	t_point	intercept;
+	t_point	delta;
+
+	intercept.y = floor(mlx->player->player_center_y / TILE_LEN) * TILE_LEN;
+	intercept.y += TILE_LEN * (mlx->player->rays[id].is_ray_facing_down);
+	intercept.x = mlx->player->player_center_x + (intercept.y - mlx->player->player_center_y) / tan(mlx->player->rays[id].ray_angle);
+	delta.y = TILE_LEN;
+	if (mlx->player->rays[id].is_ray_facing_up)
+		delta.y *= -1;
+	else
+		delta.y *= 1;
+	delta.x = fabs(TILE_LEN / tan(mlx->player->rays[id].ray_angle));
+	if (mlx->player->rays[id].is_ray_facing_left)
+		delta.x *= -1;
+	else if (mlx->player->rays[id].is_ray_facing_right)
+		delta.x *= 1;
+	if (mlx->player->rays[id].is_ray_facing_up)
+		intercept.y--;
+	while (intercept.x >= 0 && intercept.x <= mlx->width && intercept.y >= 0 && intercept.y <= mlx->height)
+	{
+		if (mlx->pars->map[(int)floor(intercept.y / TILE_LEN)][(int)floor(intercept.x / TILE_LEN)] == '1')
+		{
+			mlx->player->rays[id].found_horz_wall_hit = 1;
+			mlx->player->rays[id].hor_hit_x = intercept.x;
+			mlx->player->rays[id].hor_hit_y = intercept.y; 
+			return ;
+		}
+		else
+		{
+			intercept.x += delta.x;
+			intercept.y += delta.y;
+		}
+	} 
+}
+
+double dist(t_point p1, t_point p2)
+{
+	return (sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)));
+}
+
+t_point	get_wall_hit(t_mlx *mlx, int id)
+{
+	t_point	hor_hit;
+	t_point	vert_hit;
+	t_point	player_center;
+
+	if (mlx->player->rays[id].found_horz_wall_hit && mlx->player->rays[id].found_vert_wall_hit == 0)
+		return ((t_point){mlx->player->rays[id].hor_hit_x, mlx->player->rays[id].hor_hit_y});
+	else if (mlx->player->rays[id].found_horz_wall_hit == 0 && mlx->player->rays[id].found_vert_wall_hit)
+		return ((t_point){mlx->player->rays[id].vert_hit_x, mlx->player->rays[id].vert_hit_y});
+	player_center = (t_point){mlx->player->player_center_x, mlx->player->player_center_y};
+	hor_hit = (t_point){mlx->player->rays[id].hor_hit_x, mlx->player->rays[id].hor_hit_y};
+	vert_hit = (t_point){mlx->player->rays[id].vert_hit_x, mlx->player->rays[id].vert_hit_y};
+	if (dist(player_center, hor_hit) < dist(player_center, vert_hit))
+		return ((t_point){mlx->player->rays[id].hor_hit_x, mlx->player->rays[id].hor_hit_y});
+	else
+		return ((t_point){mlx->player->rays[id].vert_hit_x, mlx->player->rays[id].vert_hit_y});
+}
+
+void	init_ray(t_rays *ray, double rayAngle)
+{
+	ray->found_horz_wall_hit = 0;
+	ray->found_vert_wall_hit = 0;
+	ray->is_ray_facing_down = rayAngle > 0 && rayAngle < M_PI;
+	ray->is_ray_facing_up = !ray->is_ray_facing_down;
+	// ray->is_ray_facing_right = rayAngle < 0.5 * M_PI || rayAngle > 1.5 * M_PI;
+	ray->is_ray_facing_left = rayAngle > M_PI / 2 && rayAngle < 1.5 * M_PI;
+	ray->is_ray_facing_right = !ray->is_ray_facing_left;
 }
 
 void CastRays(t_mlx *mlx)
 {
 	double	rayAngle;
 	int		i;
-	// double	horizon_x;
-	// double	horizon_y;
+	t_point	wall_hit;
 
-	rayAngle = mlx->player->player_angle - (FOV_ANGLE / 2);
-	// find_horizon(mlx, &horizon_x, &horizon_y);
-	// rayAngle = mlx->player->player_angle;
 	i = -1;
-	// while (++i < 1)
-	while (++i < mlx->vars->map_w * TILE_LEN)
+	rayAngle = normalize_angle(mlx->player->player_angle - (FOV_ANGLE / 2));
+	while (++i < mlx->width)
 	{
-		rayAngle = normalize_angle(rayAngle);
-		draw_line(mlx, mlx->player->player_center_x, mlx->player->player_center_y,
-			mlx->player->player_center_x + LINE_LEN * cos(rayAngle),
-			mlx->player->player_center_y + LINE_LEN * sin(rayAngle),
-			// mlx->vars->map_w * TILE_LEN * cos(rayAngle),
-			// mlx->vars->map_h * TILE_LEN * sin(rayAngle),
-			// horizon_x, horizon_y,
-			i
-		);
-		rayAngle += FOV_ANGLE / (mlx->vars->map_w * TILE_LEN);
-		mlx->player->rays[i].ray_angle = rayAngle;
-			// printf("[%d] rayAngle: %f , distance %f  cords_wallhit(%f, %f)\n", i, mlx->player->rays[i].ray_angle, mlx->player->rays[i].distance
-			// 	, mlx->player->rays[i].wall_hit_x, mlx->player->rays[i].wall_hit_y);
-		// }
-		// else
-		// 	rayAngle += FOV_ANGLE / NUM_RAYS;
-
+		mlx->player->rays[i].ray_id = i;
+		init_ray(&mlx->player->rays[i], rayAngle);
+		find_horizontal(mlx, i);
+		find_vertical(mlx, i);
+		wall_hit = get_wall_hit(mlx, i);
+		draw_line(mlx, (t_point){mlx->player->player_center_x, mlx->player->player_center_y},
+			wall_hit, i);
+			// (t_point){mlx->player->player_center_x + 100 * cos(rayAngle), mlx->player->player_center_y + 100 * sin(rayAngle)}, i);
+		rayAngle += FOV_ANGLE / mlx->width;
+		mlx->player->rays[i].ray_angle = normalize_angle(rayAngle);
 	}
 }
 
@@ -361,11 +448,10 @@ void	draw_black_screen(t_mlx *mlx)
 
 void	handle_events(t_mlx *mlx)
 {
-	double old_x;
-	double old_y;
+	t_point	old;
 
-	old_x = mlx->player->player_x;
-	old_y = mlx->player->player_y;
+	old.x = mlx->player->player_x;
+	old.y = mlx->player->player_y;
 	if (mlx->player->key_w || mlx->player->key_s)
 	{
 		mlx->player->player_x += MOVE_SPEED * cos(mlx->player->player_angle) * mlx->player->direction_forward;
@@ -377,29 +463,17 @@ void	handle_events(t_mlx *mlx)
 		mlx->player->player_y -= MOVE_SPEED * cos(mlx->player->player_angle) * mlx->player->direction_side;
 	}
 	if (mlx->player->key_left)
-	{
-        mlx->player->player_angle -= ROT_SPEED;
-        if (mlx->player->player_angle < 0)
-            mlx->player->player_angle += 2 * M_PI;
-    }
+        mlx->player->player_angle = normalize_angle(mlx->player->player_angle -  ROT_SPEED);
     else if (mlx->player->key_right)
-    {
-        mlx->player->player_angle += ROT_SPEED;
-        if (mlx->player->player_angle >= 2 * M_PI)
-            mlx->player->player_angle -= 2 * M_PI;
-	}
-
-
-
+        mlx->player->player_angle = normalize_angle(mlx->player->player_angle + ROT_SPEED);
 	if (mlx->pars->map[(int)((mlx->player->player_y + TILE_LEN / 2)/ TILE_LEN)]\
-	[(int)((old_x + TILE_LEN / 2) / TILE_LEN)] == '1')
-		mlx->player->player_y = old_y;
-	if (mlx->pars->map[(int)((old_y + TILE_LEN / 2) / TILE_LEN)]\
+	[(int)((old.x + TILE_LEN / 2) / TILE_LEN)] == '1')
+		mlx->player->player_y = old.y;
+	if (mlx->pars->map[(int)((old.y + TILE_LEN / 2) / TILE_LEN)]\
 	[(int)((mlx->player->player_x + TILE_LEN / 2) / TILE_LEN)] == '1')
-		mlx->player->player_x = old_x;
-	// || check_circle_around_player(mlx, mlx->player->player_x, mlx->player->player_y, mlx->player->player_angle))
+		mlx->player->player_x = old.x;
 }
-//  render 
+
 int	 magic(t_mlx *mlx)
 {
 	int		x;
@@ -424,7 +498,6 @@ int	 magic(t_mlx *mlx)
 				color = GROUND_COLOR;
 			else if (mlx->pars->map[y][x] == '\0')
 				color = SPACE_COLOR;
-				// color = 0x4f81ff;
 			draw_square(mlx, x++, y, color);
 		}
 	}

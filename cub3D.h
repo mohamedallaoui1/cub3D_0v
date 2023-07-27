@@ -22,7 +22,7 @@
 #include <math.h>
 
 #define MOVE_SPEED 10
-#define ROT_SPEED 0.03
+#define ROT_SPEED 0.05
 #define LINE_LEN 30
 
 #define LINE_COLOR 0xfff
@@ -42,7 +42,7 @@
 # define KEY_RIGHT 124
 # define TILE_LEN 64.0
 
-#define FOV_ANGLE 33 * (M_PI / 180)
+#define FOV_ANGLE 60 * (M_PI / 180)
 
 
 typedef struct s_pars

@@ -231,8 +231,8 @@ double		*get_player_position(char **map)
 
 void	get_player_center(t_mlx *mlx)
 {
-	mlx->player->player_center_x = mlx->player->player_x + TILE_LEN /2;
-	mlx->player->player_center_y = mlx->player->player_y + TILE_LEN /2;
+	mlx->player->player_center_x = mlx->player->player_x + TILE_LEN / 2;
+	mlx->player->player_center_y = mlx->player->player_y + TILE_LEN / 2;
 }
 
 void draw_line(t_mlx *mlx, t_point point1, t_point point2, int index)
@@ -322,7 +322,7 @@ void	find_horizontal(t_mlx *mlx, int id)
 		delta.x = -(TILE_LEN / fabs(tan(mlx->player->rays[id].ray_angle)));
 	else
 		delta.x = TILE_LEN / fabs(tan(mlx->player->rays[id].ray_angle));
-	while (intercept.x >= 0 && intercept.x <= mlx->vars->map_w * TILE_LEN && intercept.y >= 0 && intercept.y <= mlx->vars->map_h * TILE_LEN)
+	while (intercept.x >= 0 && intercept.x <= mlx->width && intercept.y >= 0 && intercept.y <= mlx->height)
 	{
 		if (mlx->pars->map[(int)(intercept.y / TILE_LEN)][(int)(intercept.x / TILE_LEN)] == '1')
 		{
@@ -388,6 +388,7 @@ void CastRays(t_mlx *mlx)
 	rayAngle = normalize_angle(mlx->player->player_angle - (FOV_ANGLE / 2));
 	while (++i < mlx->width)
 	{
+		mlx->player->rays[i].ray_angle = rayAngle;
 		mlx->player->rays[i].ray_id = i;
 		init_ray(&mlx->player->rays[i], rayAngle);
 		find_horizontal(mlx, i);
@@ -395,8 +396,7 @@ void CastRays(t_mlx *mlx)
 		wall_hit = get_wall_hit(mlx, i);
 		draw_line(mlx, (t_point){mlx->player->player_center_x, mlx->player->player_center_y},
 			wall_hit, i);
-		rayAngle = normalize_angle(rayAngle + FOV_ANGLE / mlx->width);
-		mlx->player->rays[i].ray_angle = rayAngle;
+		rayAngle = normalize_angle(rayAngle + FOV_ANGLE / (double)mlx->width);
 	}
 	// project_walls(mlx);
 }

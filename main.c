@@ -133,14 +133,12 @@ void    parsing(t_pars *pars, int ac, char **av)
 {
 	char    **file;
 
-	// check input file:
 	if (ac < 2)
 		error("Error\nNo input file\n");
 	if (ac > 2)
 		error("Error\nToo many arguments\n");
 	if (ft_strncmp(av[1] + ft_strlen(av[1]) - 4, ".cub", 4) != 0)
 		error("Error\nWrong file extension\n");
-	// check file:
 	file = get_content(av[1]);
 	remove_newline(file);
 	check_file_general_errors(file);
@@ -266,9 +264,10 @@ void draw_line(t_mlx *mlx, t_point point1, t_point point2, int index)
 
 double normalize_angle(double angle)
 {
-	angle = remainder(angle, 2 * M_PI);
 	if (angle < 0)
-		angle = 2 * M_PI + angle;
+		angle += (2 * M_PI);
+	if (angle > (2 * M_PI))
+		angle -= (2 * M_PI);
 	return (angle);
 }
 
@@ -277,29 +276,25 @@ void	find_vertical(t_mlx *mlx, int id)
 	t_point	intercept;
 	t_point	delta;
 
-	intercept.x = floor(mlx->player->player_center_x / TILE_LEN) * TILE_LEN;
-	intercept.x += TILE_LEN * (mlx->player->rays[id].is_ray_facing_right);
+	intercept.x = floor(mlx->player->player_center_x / TILE_LEN) * TILE_LEN + TILE_LEN * mlx->player->rays[id].is_ray_facing_right;
+	if (mlx->player->rays[id].is_ray_facing_left)
+		intercept.x -= 1;
 	intercept.y = mlx->player->player_center_y + (intercept.x - mlx->player->player_center_x) * tan(mlx->player->rays[id].ray_angle);
-	delta.x = TILE_LEN;
 	if (mlx->player->rays[id].is_ray_facing_left)
-		delta.x *= -1;
+		delta.x = -TILE_LEN;
 	else
-		delta.x *= 1;
-	delta.y = fabs(TILE_LEN * tan(mlx->player->rays[id].ray_angle));
+		delta.x = TILE_LEN;
 	if (mlx->player->rays[id].is_ray_facing_up)
-		delta.y *= -1;
+		delta.y = -(TILE_LEN * fabs(tan(mlx->player->rays[id].ray_angle)));
 	else
-		delta.y *= 1;
-
-	if (mlx->player->rays[id].is_ray_facing_left)
-		intercept.x--;
+		delta.y = TILE_LEN * fabs(tan(mlx->player->rays[id].ray_angle));
 	while (intercept.x >= 0 && intercept.x <= mlx->width && intercept.y >= 0 && intercept.y <= mlx->height)
 	{
 		if (mlx->pars->map[(int)(intercept.y / TILE_LEN)][(int)(intercept.x / TILE_LEN)] == '1')
 		{
-			mlx->player->rays[id].found_vert_wall_hit = 1;
 			mlx->player->rays[id].vert_hit_x = intercept.x;
-			mlx->player->rays[id].vert_hit_y = intercept.y; 
+			mlx->player->rays[id].vert_hit_y = intercept.y;
+			mlx->player->rays[id].found_vert_wall_hit = 1;
 			return ;
 		}
 		else
@@ -315,28 +310,25 @@ void	find_horizontal(t_mlx *mlx, int id)
 	t_point	intercept;
 	t_point	delta;
 
-	intercept.y = floor(mlx->player->player_center_y / TILE_LEN) * TILE_LEN;
-	intercept.y += TILE_LEN * (mlx->player->rays[id].is_ray_facing_down);
+	intercept.y = floor(mlx->player->player_center_y / TILE_LEN) * TILE_LEN + TILE_LEN * mlx->player->rays[id].is_ray_facing_down;
+	if (mlx->player->rays[id].is_ray_facing_up)
+		intercept.y -= 1;
 	intercept.x = mlx->player->player_center_x + (intercept.y - mlx->player->player_center_y) / tan(mlx->player->rays[id].ray_angle);
-	delta.y = TILE_LEN;
 	if (mlx->player->rays[id].is_ray_facing_up)
-		delta.y *= -1;
+		delta.y = -TILE_LEN;
 	else
-		delta.y *= 1;
-	delta.x = fabs(TILE_LEN / tan(mlx->player->rays[id].ray_angle));
+		delta.y = TILE_LEN;
 	if (mlx->player->rays[id].is_ray_facing_left)
-		delta.x *= -1;
-	else if (mlx->player->rays[id].is_ray_facing_right)
-		delta.x *= 1;
-	if (mlx->player->rays[id].is_ray_facing_up)
-		intercept.y--;
-	while (intercept.x >= 0 && intercept.x <= mlx->width && intercept.y >= 0 && intercept.y <= mlx->height)
+		delta.x = -(TILE_LEN / fabs(tan(mlx->player->rays[id].ray_angle)));
+	else
+		delta.x = TILE_LEN / fabs(tan(mlx->player->rays[id].ray_angle));
+	while (intercept.x >= 0 && intercept.x <= mlx->vars->map_w * TILE_LEN && intercept.y >= 0 && intercept.y <= mlx->vars->map_h * TILE_LEN)
 	{
-		if (mlx->pars->map[(int)floor(intercept.y / TILE_LEN)][(int)floor(intercept.x / TILE_LEN)] == '1')
+		if (mlx->pars->map[(int)(intercept.y / TILE_LEN)][(int)(intercept.x / TILE_LEN)] == '1')
 		{
-			mlx->player->rays[id].found_horz_wall_hit = 1;
 			mlx->player->rays[id].hor_hit_x = intercept.x;
-			mlx->player->rays[id].hor_hit_y = intercept.y; 
+			mlx->player->rays[id].hor_hit_y = intercept.y;
+			mlx->player->rays[id].found_horz_wall_hit = 1;
 			return ;
 		}
 		else
@@ -344,7 +336,7 @@ void	find_horizontal(t_mlx *mlx, int id)
 			intercept.x += delta.x;
 			intercept.y += delta.y;
 		}
-	} 
+	}
 }
 
 double dist(t_point p1, t_point p2)
@@ -357,18 +349,19 @@ t_point	get_wall_hit(t_mlx *mlx, int id)
 	t_point	hor_hit;
 	t_point	vert_hit;
 	t_point	player_center;
-
-	if (mlx->player->rays[id].found_horz_wall_hit && mlx->player->rays[id].found_vert_wall_hit == 0)
-		return ((t_point){mlx->player->rays[id].hor_hit_x, mlx->player->rays[id].hor_hit_y});
-	else if (mlx->player->rays[id].found_horz_wall_hit == 0 && mlx->player->rays[id].found_vert_wall_hit)
-		return ((t_point){mlx->player->rays[id].vert_hit_x, mlx->player->rays[id].vert_hit_y});
 	player_center = (t_point){mlx->player->player_center_x, mlx->player->player_center_y};
 	hor_hit = (t_point){mlx->player->rays[id].hor_hit_x, mlx->player->rays[id].hor_hit_y};
 	vert_hit = (t_point){mlx->player->rays[id].vert_hit_x, mlx->player->rays[id].vert_hit_y};
-	if (dist(player_center, hor_hit) < dist(player_center, vert_hit))
-		return ((t_point){mlx->player->rays[id].hor_hit_x, mlx->player->rays[id].hor_hit_y});
+	if (mlx->player->rays[id].found_horz_wall_hit && mlx->player->rays[id].found_vert_wall_hit == 0)
+		return (hor_hit);
+	else if (mlx->player->rays[id].found_horz_wall_hit == 0 && mlx->player->rays[id].found_vert_wall_hit)
+		return (vert_hit);
+	if (dist(player_center, hor_hit) < dist(player_center, vert_hit) && mlx->player->rays[id].found_horz_wall_hit && mlx->player->rays[id].found_vert_wall_hit)
+		return (hor_hit);
+	else if (mlx->player->rays[id].found_horz_wall_hit && mlx->player->rays[id].found_vert_wall_hit)
+		return (vert_hit);
 	else
-		return ((t_point){mlx->player->rays[id].vert_hit_x, mlx->player->rays[id].vert_hit_y});
+		return (player_center);
 }
 
 void	init_ray(t_rays *ray, double rayAngle)
@@ -377,10 +370,13 @@ void	init_ray(t_rays *ray, double rayAngle)
 	ray->found_vert_wall_hit = 0;
 	ray->is_ray_facing_down = rayAngle > 0 && rayAngle < M_PI;
 	ray->is_ray_facing_up = !ray->is_ray_facing_down;
-	// ray->is_ray_facing_right = rayAngle < 0.5 * M_PI || rayAngle > 1.5 * M_PI;
 	ray->is_ray_facing_left = rayAngle > M_PI / 2 && rayAngle < 1.5 * M_PI;
 	ray->is_ray_facing_right = !ray->is_ray_facing_left;
 }
+
+// void	project_walls(t_mlx *mlx)
+// {
+// }
 
 void CastRays(t_mlx *mlx)
 {
@@ -399,10 +395,10 @@ void CastRays(t_mlx *mlx)
 		wall_hit = get_wall_hit(mlx, i);
 		draw_line(mlx, (t_point){mlx->player->player_center_x, mlx->player->player_center_y},
 			wall_hit, i);
-			// (t_point){mlx->player->player_center_x + 100 * cos(rayAngle), mlx->player->player_center_y + 100 * sin(rayAngle)}, i);
-		rayAngle += FOV_ANGLE / mlx->width;
-		mlx->player->rays[i].ray_angle = normalize_angle(rayAngle);
+		rayAngle = normalize_angle(rayAngle + FOV_ANGLE / mlx->width);
+		mlx->player->rays[i].ray_angle = rayAngle;
 	}
+	// project_walls(mlx);
 }
 
 void	draw_player(t_mlx *mlx, int color)

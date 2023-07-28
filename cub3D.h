@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/07 17:22:35 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/07/28 20:46:53 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,18 @@
 # include <mlx.h>
 #include <math.h>
 
-#define MOVE_SPEED 10
+#define MOVE_SPEED 5
 #define ROT_SPEED 0.05
 #define LINE_LEN 30
+#define PROJ_DIST 200
 
 #define LINE_COLOR 0xfff
 #define PLAYER_COLOR 0xff0000
 #define WALL_COLOR 0x943a5b
 #define SPACE_COLOR 0x000000
-#define GROUND_COLOR 0xffffff
+#define GROUND_COLOR 0xC3CB6E
+#define WIDTH 1200
+#define HEIGHT 1000
 
 #define RIGHT -1
 #define LEFT  1
@@ -136,11 +139,13 @@ typedef struct s_mlx
 	t_player *player;
 }           t_mlx;
 
-
 void	texture_parsing(t_pars *pars, char **file);
 void	error(char *str);
 void	map_pars(t_pars *pars, char **file);
 void	color_pars(t_pars *pars, char **file);
 int		is_player(char c);
-double normalize_angle(double angle);
+double	normalize_angle(double angle);
+int		up_down(t_mlx *mlx);
+int		left_right(t_mlx *mlx);
+void	get_player_center(t_mlx *mlx);
 #endif

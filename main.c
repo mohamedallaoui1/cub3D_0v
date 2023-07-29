@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:15:18 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/29 14:57:11 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/29 20:17:09 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,14 +157,14 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 {
 	char	*dst;
 
-	// if (x <= 0 || x > (mlx->vars->map_w * TILE_LEN)|| y <= 0 || y > (mlx->vars->map_h * TILE_LEN))
+	// if (x <= 0 || x > (mlx->vars->map_w * TILE_SIZE)|| y <= 0 || y > (mlx->vars->map_h * TILE_SIZE))
 	// 	return ;
 	// getting color from address
 	dst = mlx->img.addr + (y * mlx->img.line_length + x * (mlx->img.bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }
 
-int	get_pxl_color(t_data *img, int x, int y)
+int	get_pixel_color(t_data *img, int x, int y)
 {
 	char	*dst;
 
@@ -179,7 +179,7 @@ void	draw_square(t_mlx *mlx, int x, int y, int color)
 	int		square_size;
 
 	i = 0;
-	square_size = TILE_LEN;
+	square_size = TILE_SIZE;
 	while (i < square_size - 1)
 	{
 		j = 0;
@@ -240,8 +240,8 @@ double		*get_player_position(char **map)
 
 void	get_player_center(t_mlx *mlx)
 {
-	mlx->player->player_center_x = mlx->player->player_x + TILE_LEN / 2;
-	mlx->player->player_center_y = mlx->player->player_y + TILE_LEN / 2;
+	mlx->player->player_center_x = mlx->player->player_x + TILE_SIZE / 2;
+	mlx->player->player_center_y = mlx->player->player_y + TILE_SIZE / 2;
 }
 
 void draw_line(t_mlx *mlx, t_point point1, t_point point2)
@@ -284,19 +284,19 @@ void	find_vertical(t_mlx *mlx, int id)
 	t_point	intercept;
 	t_point	delta;
 
-	intercept.x = floor(mlx->player->player_center_x / TILE_LEN) * TILE_LEN + TILE_LEN * mlx->player->rays[id].is_ray_facing_right;
+	intercept.x = floor(mlx->player->player_center_x / TILE_SIZE) * TILE_SIZE + TILE_SIZE * mlx->player->rays[id].is_ray_facing_right;
 	intercept.y = mlx->player->player_center_y + (intercept.x - mlx->player->player_center_x) * tan(mlx->player->rays[id].ray_angle);
 	if (mlx->player->rays[id].is_ray_facing_left)
-		delta.x = -TILE_LEN;
+		delta.x = -TILE_SIZE;
 	else
-		delta.x = TILE_LEN;
+		delta.x = TILE_SIZE;
 	if (mlx->player->rays[id].is_ray_facing_up)
-		delta.y = -(TILE_LEN * fabs(tan(mlx->player->rays[id].ray_angle)));
+		delta.y = -(TILE_SIZE * fabs(tan(mlx->player->rays[id].ray_angle)));
 	else
-		delta.y = TILE_LEN * fabs(tan(mlx->player->rays[id].ray_angle));
+		delta.y = TILE_SIZE * fabs(tan(mlx->player->rays[id].ray_angle));
 	while (intercept.x >= 0 && intercept.x < mlx->width && intercept.y >= 0 && intercept.y < mlx->height)
 	{
-		if (mlx->pars->map[(int)(intercept.y / TILE_LEN)][(int)((intercept.x - 1 * mlx->player->rays[id].is_ray_facing_left) / TILE_LEN)] == '1')
+		if (mlx->pars->map[(int)(intercept.y / TILE_SIZE)][(int)((intercept.x - 1 * mlx->player->rays[id].is_ray_facing_left) / TILE_SIZE)] == '1')
 		{
 			mlx->player->rays[id].vert_hit_x = intercept.x;
 			mlx->player->rays[id].vert_hit_y = intercept.y;
@@ -316,19 +316,19 @@ void	find_horizontal(t_mlx *mlx, int id)
 	t_point	intercept;
 	t_point	delta;
 
-	intercept.y = floor(mlx->player->player_center_y / TILE_LEN) * TILE_LEN + TILE_LEN * mlx->player->rays[id].is_ray_facing_down;
+	intercept.y = floor(mlx->player->player_center_y / TILE_SIZE) * TILE_SIZE + TILE_SIZE * mlx->player->rays[id].is_ray_facing_down;
 	intercept.x = mlx->player->player_center_x + (intercept.y - mlx->player->player_center_y) / tan(mlx->player->rays[id].ray_angle);
 	if (mlx->player->rays[id].is_ray_facing_up)
-		delta.y = -TILE_LEN;
+		delta.y = -TILE_SIZE;
 	else
-		delta.y = TILE_LEN;
+		delta.y = TILE_SIZE;
 	if (mlx->player->rays[id].is_ray_facing_left)
-		delta.x = -(TILE_LEN / fabs(tan(mlx->player->rays[id].ray_angle)));
+		delta.x = -(TILE_SIZE / fabs(tan(mlx->player->rays[id].ray_angle)));
 	else
-		delta.x = TILE_LEN / fabs(tan(mlx->player->rays[id].ray_angle));
+		delta.x = TILE_SIZE / fabs(tan(mlx->player->rays[id].ray_angle));
 	while (intercept.x >= 0 && intercept.x < mlx->width && intercept.y >= 0 && intercept.y < mlx->height)
 	{
-		if (mlx->pars->map[(int)((intercept.y - 1 * mlx->player->rays[id].is_ray_facing_up) / TILE_LEN)][(int)((intercept.x) / TILE_LEN)] == '1')
+		if (mlx->pars->map[(int)((intercept.y - 1 * mlx->player->rays[id].is_ray_facing_up) / TILE_SIZE)][(int)((intercept.x) / TILE_SIZE)] == '1')
 		{
 			mlx->player->rays[id].hor_hit_x = intercept.x;
 			mlx->player->rays[id].hor_hit_y = intercept.y;
@@ -389,18 +389,24 @@ void	project_wall(t_mlx *mlx, int id)
 	double	count;
 
 	if (mlx->player->rays[id].is_hor)
-		val = (get_wall_hit(mlx, id).x / WIDTH) * TILE_LEN;
+		val = (get_wall_hit(mlx, id).x / WIDTH) * mlx->textures[0].img_width;
 	else
-		val = (get_wall_hit(mlx, id).y / HEIGHT) * TILE_LEN;
+		val = (get_wall_hit(mlx, id).y / HEIGHT) * mlx->textures[0].img_width;
 	i = 0;
 	count = 0;
-	projected_wall_height = TILE_LEN / mlx->player->rays[id].distance * PROJ_DIST;
+	projected_wall_height = TILE_SIZE / mlx->player->rays[id].distance * PROJ_DIST;
 	while (i < HEIGHT)
 	{
 		if (i < HEIGHT / 2 - projected_wall_height / 2)
-			my_mlx_pixel_put(mlx, id, i, 0xd2d1a8);//CEIL COLOR
-		else if (i > HEIGHT / 2 - projected_wall_height / 2 && i < HEIGHT / 2 + projected_wall_height / 2)
-			my_mlx_pixel_put(mlx, id, i, get_pxl_color(&mlx->textures[0], (int)val % (int)TILE_LEN, (int)((count++ / projected_wall_height) * TILE_LEN)));
+			my_mlx_pixel_put(mlx, id, i, 0xffff);//CEIL COLOR
+		else if (i >= HEIGHT / 2 - projected_wall_height / 2 && i <= HEIGHT / 2 + projected_wall_height / 2)
+			my_mlx_pixel_put(mlx, id, i,
+				get_pixel_color(&mlx->textures[0],
+					(int)id % mlx->textures[0].img_width, // for x of texture
+					i % mlx->textures[0].img_width
+					// (int)((count++ / projected_wall_height) * mlx->textures[0].img_width) // for y of texture
+					)
+				);
 		else
 			my_mlx_pixel_put(mlx, id, i, GROUND_COLOR); //FLOOR COLOR
 		i++;
@@ -425,8 +431,6 @@ void CastRays(t_mlx *mlx)
 		wall_hit = get_wall_hit(mlx, i);
 		mlx->player->rays[i].distance = dist((t_point){mlx->player->player_center_x, mlx->player->player_center_y}
 				, wall_hit) * cos(rayAngle - mlx->player->player_angle);
-		// draw_line(mlx, (t_point){mlx->player->player_center_x, mlx->player->player_center_y},
-		// 	wall_hit);
 		project_wall(mlx, i);
 		rayAngle = normalize_angle(rayAngle + FOV_ANGLE / (double)WIDTH);
 	}
@@ -439,7 +443,7 @@ void	draw_player(t_mlx *mlx, int color)
 	int	j;
 
 	player_square_size = 8;
-	mlx->player->offset = (TILE_LEN - player_square_size) / 2;
+	mlx->player->offset = (TILE_SIZE - player_square_size) / 2;
 	get_player_center(mlx);
 	i = 0;
 	while (i < player_square_size)
@@ -460,10 +464,10 @@ void	draw_black_screen(t_mlx *mlx)
 	int		y;
 
 	y = 0;
-	while (y < mlx->vars->map_h * TILE_LEN)
+	while (y < mlx->vars->map_h * TILE_SIZE)
 	{
 		x = 0;
-		while (x < mlx->vars->map_w * TILE_LEN)
+		while (x < mlx->vars->map_w * TILE_SIZE)
 		{
 			my_mlx_pixel_put(mlx, x, y, 0x000000);
 			x++;
@@ -498,42 +502,57 @@ int control_key(int keycode, t_mlx *mlx)
     if (keycode == KEY_W)
 	{
 		mlx->player->key_w = 1;
-		mlx->player->direction_forward = 1;
+		if (!mlx->player->direction_forward)
+			mlx->player->direction_forward = 1;
 	}
 	if (keycode == KEY_S)
 	{
 		mlx->player->key_s = 1;
-		mlx->player->direction_forward = -1;
+		if (!mlx->player->direction_forward)
+			mlx->player->direction_forward = -1;
 	}
     if (keycode == KEY_A)
 	{
 		mlx->player->key_a = 1;
-		mlx->player->direction_side = LEFT;
+		if (!mlx->player->direction_side)
+			mlx->player->direction_side = LEFT;
 	}
     if (keycode == KEY_D)
 	{
 		mlx->player->key_d = 1;
-		mlx->player->direction_side = RIGHT;
+		if (!mlx->player->direction_side)
+			mlx->player->direction_side = RIGHT;
 	}
     if (keycode == KEY_LEFT)
 		mlx->player->key_left = 1;
     if (keycode == KEY_RIGHT)
 		mlx->player->key_right = 1;
-    if (keycode == 53)
-        exit(0);
+    (keycode == 53) && (exit(0), 0);
     return 0;
 }
 
 int key_released(int keycode, t_mlx *mlx)
 {
     if (keycode == KEY_W)
+	{
 		mlx->player->key_w = 0;
+		mlx->player->direction_forward = 0;
+	}
 	if (keycode == KEY_S)
+	{
 		mlx->player->key_s = 0;
+		mlx->player->direction_forward = 0;
+	}
     if (keycode == KEY_A)
+	{
 		mlx->player->key_a = 0;
+		mlx->player->direction_side = 0;	
+	}
     if (keycode == KEY_D)
+	{
 		mlx->player->key_d = 0;
+		mlx->player->direction_side = 0;	
+	}
     if (keycode == KEY_LEFT)
 		mlx->player->key_left = 0;
     if (keycode == KEY_RIGHT)
@@ -579,8 +598,6 @@ void	texture_init(t_mlx *mlx)
 {
 	mlx->textures[0].img = mlx_xpm_file_to_image(mlx->mlx,
 			mlx->pars->no, &mlx->textures[0].img_width, &mlx->textures[0].img_height);
-	write(1, mlx->pars->no, ft_strlen(mlx->pars->no));
-	write(1, "\n", 1);
 	if (!mlx->textures[0].img)
 		(write(1, "Error\nImage Does not exist!", 28), exit(0));
 	mlx->textures[0].addr = mlx_get_data_addr(mlx->textures[0].img,
@@ -600,13 +617,13 @@ t_mlx	*init(double *arr, int ac, char *av[])
 	parsing(mlx->pars, ac, av);
 	get_map_w_h(mlx->vars, mlx->pars);
 	arr = get_player_position(mlx->pars->map);
-	mlx->player->player_y = arr[0] * TILE_LEN;
-	mlx->player->player_x = arr[1] * TILE_LEN;
+	mlx->player->player_y = arr[0] * TILE_SIZE;
+	mlx->player->player_x = arr[1] * TILE_SIZE;
 	free(arr);
 	get_player_direction(mlx);
 	get_player_angle(mlx);
-	mlx->height = mlx->vars->map_h * TILE_LEN;
-	mlx->width = mlx->vars->map_w * TILE_LEN;
+	mlx->height = mlx->vars->map_h * TILE_SIZE;
+	mlx->width = mlx->vars->map_w * TILE_SIZE;
 	mlx->mlx = mlx_init();
 	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "cub3D");
 	mlx->img.img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
@@ -616,6 +633,8 @@ t_mlx	*init(double *arr, int ac, char *av[])
 	mlx->player->key_s = 0;
 	mlx->player->key_d = 0;
 	mlx->player->key_w = 0;
+	mlx->player->direction_forward = 0;
+	mlx->player->direction_side = 0;
 	mlx->player->key_left = 0;
 	mlx->player->key_right = 0;
 	return (mlx);

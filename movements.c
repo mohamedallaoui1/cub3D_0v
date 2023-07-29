@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 15:44:00 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/28 18:46:36 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/29 18:28:20 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,20 @@ int	move_condition(t_mlx *mlx, t_point *old)
 	t_point	x_y;
 
 	x_y = (t_point){0, 0};
-	if (mlx->pars->map[(int)(mlx->player->player_center_y / TILE_LEN)]\
-	[(int)((old->x + TILE_LEN / 2) / TILE_LEN)] == '1')
+	if (mlx->pars->map[(int)(mlx->player->player_center_y / TILE_SIZE)]\
+	[(int)((old->x + TILE_SIZE / 2) / TILE_SIZE)] == '1')
 	{
 		mlx->player->player_y = old->y;
 		x_y.y = 1;
 	}
-	if (mlx->pars->map[(int)((old->y + TILE_LEN / 2) / TILE_LEN)]\
-	[(int)((mlx->player->player_center_x) / TILE_LEN)] == '1')
+	if (mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / TILE_SIZE)]\
+	[(int)((mlx->player->player_center_x) / TILE_SIZE)] == '1')
 	{
 		mlx->player->player_x = old->x;
 		x_y.x = 1;
 	}
-	if (mlx->pars->map[(int)((mlx->player->player_center_y) / TILE_LEN)]
-	[(int)((mlx->player->player_center_x) / TILE_LEN)] == '1' && !x_y.x && !x_y.y)
+	if (mlx->pars->map[(int)((mlx->player->player_center_y) / TILE_SIZE)]
+	[(int)((mlx->player->player_center_x) / TILE_SIZE)] == '1' && !x_y.x && !x_y.y)
 	{
 		mlx->player->player_x = old->x;
 		mlx->player->player_y = old->y;

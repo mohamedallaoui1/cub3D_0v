@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/29 11:22:47 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/29 20:14:39 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <mlx.h>
 #include <math.h>
 
-#define MOVE_SPEED 3
+#define MOVE_SPEED 5
 #define ROT_SPEED 0.05
 #define LINE_LEN 30
 #define PROJ_DIST 200
@@ -43,7 +43,7 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
-# define TILE_LEN 64.0
+# define TILE_SIZE 64.0
 
 #define FOV_ANGLE 60 * (M_PI / 180)
 

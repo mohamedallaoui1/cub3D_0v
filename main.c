@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:15:18 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/28 20:47:08 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/29 14:57:11 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,17 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 
 	// if (x <= 0 || x > (mlx->vars->map_w * TILE_LEN)|| y <= 0 || y > (mlx->vars->map_h * TILE_LEN))
 	// 	return ;
-	dst = mlx->img.addr + (y * mlx->img.line_length + x * (mlx->img.bits_per_M_PIxel / 8));
+	// getting color from address
+	dst = mlx->img.addr + (y * mlx->img.line_length + x * (mlx->img.bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
+}
+
+int	get_pxl_color(t_data *img, int x, int y)
+{
+	char	*dst;
+
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+	return (*(unsigned int *)dst);
 }
 
 void	draw_square(t_mlx *mlx, int x, int y, int color)
@@ -344,19 +353,20 @@ t_point	get_wall_hit(t_mlx *mlx, int id)
 	t_point	hor_hit;
 	t_point	vert_hit;
 	t_point	player_center;
+
 	player_center = (t_point){mlx->player->player_center_x, mlx->player->player_center_y};
 	hor_hit = (t_point){mlx->player->rays[id].hor_hit_x, mlx->player->rays[id].hor_hit_y};
 	vert_hit = (t_point){mlx->player->rays[id].vert_hit_x, mlx->player->rays[id].vert_hit_y};
 	if (mlx->player->rays[id].found_horz_wall_hit && mlx->player->rays[id].found_vert_wall_hit == 0)
-		return (hor_hit);
+		return (mlx->player->rays[id].is_hor = 1, hor_hit);
 	else if (mlx->player->rays[id].found_horz_wall_hit == 0 && mlx->player->rays[id].found_vert_wall_hit)
-		return (vert_hit);
+		return (mlx->player->rays[id].is_hor = 0, vert_hit);
 	if (dist(player_center, hor_hit) < dist(player_center, vert_hit) && mlx->player->rays[id].found_horz_wall_hit && mlx->player->rays[id].found_vert_wall_hit)
-		return (hor_hit);
+		return (mlx->player->rays[id].is_hor = 1, hor_hit);
 	else if (mlx->player->rays[id].found_horz_wall_hit && mlx->player->rays[id].found_vert_wall_hit)
-		return (vert_hit);
+		return (mlx->player->rays[id].is_hor = 0, vert_hit);
 	else
-		return (player_center);
+		return (mlx->player->rays[id].is_hor = 0, player_center);
 }
 
 void	init_ray(t_rays *ray, double rayAngle)
@@ -375,17 +385,24 @@ void	project_wall(t_mlx *mlx, int id)
 {
 	int		i;
 	double	projected_wall_height;
-	
+	double	val;
+	double	count;
+
+	if (mlx->player->rays[id].is_hor)
+		val = (get_wall_hit(mlx, id).x / WIDTH) * TILE_LEN;
+	else
+		val = (get_wall_hit(mlx, id).y / HEIGHT) * TILE_LEN;
 	i = 0;
+	count = 0;
 	projected_wall_height = TILE_LEN / mlx->player->rays[id].distance * PROJ_DIST;
 	while (i < HEIGHT)
 	{
 		if (i < HEIGHT / 2 - projected_wall_height / 2)
-			my_mlx_pixel_put(mlx, id + mlx->width, i, 0xd2d1a8);//CEIL COLOR
+			my_mlx_pixel_put(mlx, id, i, 0xd2d1a8);//CEIL COLOR
 		else if (i > HEIGHT / 2 - projected_wall_height / 2 && i < HEIGHT / 2 + projected_wall_height / 2)
-			my_mlx_pixel_put(mlx, id + mlx->width, i, WALL_COLOR);
+			my_mlx_pixel_put(mlx, id, i, get_pxl_color(&mlx->textures[0], (int)val % (int)TILE_LEN, (int)((count++ / projected_wall_height) * TILE_LEN)));
 		else
-			my_mlx_pixel_put(mlx, id + mlx->width, i, GROUND_COLOR); //FLOOR COLOR
+			my_mlx_pixel_put(mlx, id, i, GROUND_COLOR); //FLOOR COLOR
 		i++;
 	}
 }
@@ -397,6 +414,7 @@ void CastRays(t_mlx *mlx)
 	t_point	wall_hit;
 
 	i = -1;
+	get_player_center(mlx);
 	rayAngle = normalize_angle(mlx->player->player_angle - (FOV_ANGLE / 2));
 	while (++i < WIDTH)
 	{
@@ -407,8 +425,8 @@ void CastRays(t_mlx *mlx)
 		wall_hit = get_wall_hit(mlx, i);
 		mlx->player->rays[i].distance = dist((t_point){mlx->player->player_center_x, mlx->player->player_center_y}
 				, wall_hit) * cos(rayAngle - mlx->player->player_angle);
-		draw_line(mlx, (t_point){mlx->player->player_center_x, mlx->player->player_center_y},
-			wall_hit);
+		// draw_line(mlx, (t_point){mlx->player->player_center_x, mlx->player->player_center_y},
+		// 	wall_hit);
 		project_wall(mlx, i);
 		rayAngle = normalize_angle(rayAngle + FOV_ANGLE / (double)WIDTH);
 	}
@@ -423,7 +441,6 @@ void	draw_player(t_mlx *mlx, int color)
 	player_square_size = 8;
 	mlx->player->offset = (TILE_LEN - player_square_size) / 2;
 	get_player_center(mlx);
-	CastRays(mlx);
 	i = 0;
 	while (i < player_square_size)
 	{
@@ -469,33 +486,9 @@ void	handle_events(t_mlx *mlx)
 
 int	 magic(t_mlx *mlx)
 {
-	int		x;
-	int		y;
-	int		color;
-	t_vars	*vars;
-
-	y = -1;
-	vars = mlx->vars;
-	draw_black_screen(mlx);
+	mlx_clear_window(mlx->mlx, mlx->win);
 	handle_events(mlx);
-	// CastRays(mlx);
-	while (++y < mlx->vars->map_h)
-	{
-		x = 0;
-		while (x < mlx->vars->map_w)
-		{
-			if (mlx->pars->map[y][x] == '1')
-				color = WALL_COLOR;
-			else if (mlx->pars->map[y][x] == ' ')
-				color = SPACE_COLOR;
-			else if (mlx->pars->map[y][x] == '0' || is_player(mlx->pars->map[y][x]))
-				color = GROUND_COLOR;
-			else if (mlx->pars->map[y][x] == '\0')
-				color = SPACE_COLOR;
-			draw_square(mlx, x++, y, color);
-		}
-	}
-	draw_player(mlx, PLAYER_COLOR);
+	CastRays(mlx);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
 	return (0);
 }
@@ -582,14 +575,28 @@ void	get_player_angle(t_mlx *mlx)
         mlx->player->player_angle = M_PI;
 }
 
+void	texture_init(t_mlx *mlx)
+{
+	mlx->textures[0].img = mlx_xpm_file_to_image(mlx->mlx,
+			mlx->pars->no, &mlx->textures[0].img_width, &mlx->textures[0].img_height);
+	write(1, mlx->pars->no, ft_strlen(mlx->pars->no));
+	write(1, "\n", 1);
+	if (!mlx->textures[0].img)
+		(write(1, "Error\nImage Does not exist!", 28), exit(0));
+	mlx->textures[0].addr = mlx_get_data_addr(mlx->textures[0].img,
+			&mlx->textures[0].bits_per_pixel, &mlx->textures[0].line_length, &mlx->textures[0].endian);
+	if (!mlx->textures[0].addr)
+		(write(1, "Error\nImage Problem!", 28), exit(0));
+}
+
 t_mlx	*init(double *arr, int ac, char *av[])
 {
 	t_mlx *mlx;
 
-	mlx = malloc (sizeof(t_mlx));
-	mlx->pars = malloc (sizeof(t_pars));
-	mlx->vars = malloc (sizeof(t_vars));
-	mlx->player = malloc (sizeof(t_player));
+	mlx = malloc(sizeof(t_mlx));
+	mlx->pars = malloc(sizeof(t_pars));
+	mlx->vars = malloc(sizeof(t_vars));
+	mlx->player = malloc(sizeof(t_player));
 	parsing(mlx->pars, ac, av);
 	get_map_w_h(mlx->vars, mlx->pars);
 	arr = get_player_position(mlx->pars->map);
@@ -601,9 +608,10 @@ t_mlx	*init(double *arr, int ac, char *av[])
 	mlx->height = mlx->vars->map_h * TILE_LEN;
 	mlx->width = mlx->vars->map_w * TILE_LEN;
 	mlx->mlx = mlx_init();
-	mlx->win = mlx_new_window(mlx->mlx, WIDTH + mlx->width, HEIGHT, "cub3D");
-	mlx->img.img = mlx_new_image(mlx->mlx, WIDTH + mlx->width, HEIGHT);
-	mlx->img.addr = mlx_get_data_addr(mlx->img.img, &mlx->img.bits_per_M_PIxel, &mlx->img.line_length, &mlx->img.endian);
+	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "cub3D");
+	mlx->img.img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
+	mlx->img.addr = mlx_get_data_addr(mlx->img.img, &mlx->img.bits_per_pixel, &mlx->img.line_length, &mlx->img.endian);
+	texture_init(mlx);
 	mlx->player->key_a = 0;
 	mlx->player->key_s = 0;
 	mlx->player->key_d = 0;

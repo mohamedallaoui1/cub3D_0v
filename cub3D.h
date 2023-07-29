@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/28 20:46:53 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/29 11:22:47 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <mlx.h>
 #include <math.h>
 
-#define MOVE_SPEED 5
+#define MOVE_SPEED 3
 #define ROT_SPEED 0.05
 #define LINE_LEN 30
 #define PROJ_DIST 200
@@ -31,7 +31,7 @@
 #define WALL_COLOR 0x943a5b
 #define SPACE_COLOR 0x000000
 #define GROUND_COLOR 0xC3CB6E
-#define WIDTH 1200
+#define WIDTH 2000
 #define HEIGHT 1000
 
 #define RIGHT -1
@@ -65,9 +65,11 @@ typedef struct s_data
 {
 	void    *img;
 	char    *addr;
-	int     bits_per_M_PIxel;
+	int     bits_per_pixel;
 	int     line_length;
 	int     endian;
+	int		img_width;
+	int		img_height;
 }           t_data;
 
 
@@ -93,6 +95,7 @@ typedef struct s_rays
 	int	 found_horz_wall_hit;
 	int	 found_vert_wall_hit;
 	double distance;
+	int		is_hor;
 }			t_rays;
 
 typedef struct s_point
@@ -125,8 +128,6 @@ typedef struct s_player
 	t_rays	*rays;
 }               t_player;
 
-
-
 typedef struct s_mlx
 {
 	void    *mlx;
@@ -134,6 +135,7 @@ typedef struct s_mlx
 	int  width;
 	int  height;
 	t_data  img;
+	t_data  textures[4];
 	t_pars  *pars;
 	t_vars  *vars;
 	t_player *player;

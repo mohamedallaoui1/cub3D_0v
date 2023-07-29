@@ -164,6 +164,11 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
+int	color_to_int(int r, int g, int b)
+{
+	return (r << 16 | g << 8 | b);
+}
+
 int	get_pxl_color(t_data *img, int x, int y)
 {
 	char	*dst;
@@ -398,11 +403,11 @@ void	project_wall(t_mlx *mlx, int id)
 	while (i < HEIGHT)
 	{
 		if (i < HEIGHT / 2 - projected_wall_height / 2)
-			my_mlx_pixel_put(mlx, id, i, 0xd2d1a8);//CEIL COLOR
+			my_mlx_pixel_put(mlx, id, i, color_to_int(mlx->pars->c_rgb[0], mlx->pars->c_rgb[1], mlx->pars->c_rgb[2]));//CEIL COLOR
 		else if (i > HEIGHT / 2 - projected_wall_height / 2 && i < HEIGHT / 2 + projected_wall_height / 2)
 			my_mlx_pixel_put(mlx, id, i, get_pxl_color(&mlx->textures[0], (int)val % (int)TILE_LEN, (int)((count++ / projected_wall_height) * TILE_LEN)));
 		else
-			my_mlx_pixel_put(mlx, id, i, GROUND_COLOR); //FLOOR COLOR
+			my_mlx_pixel_put(mlx, id, i, color_to_int(mlx->pars->f_rgb[0], mlx->pars->f_rgb[1], mlx->pars->f_rgb[2])); //FLOOR COLOR
 		i++;
 	}
 }

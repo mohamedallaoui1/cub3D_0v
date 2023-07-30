@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:15:18 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/29 20:17:09 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/30 16:38:43 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,11 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
+int	color_to_int(int rgb[3])
+{
+	return (rgb[0] << 16 | rgb[1] << 8 | rgb[2]);
+}
+
 int	get_pixel_color(t_data *img, int x, int y)
 {
 	char	*dst;
@@ -246,26 +251,24 @@ void	get_player_center(t_mlx *mlx)
 
 void draw_line(t_mlx *mlx, t_point point1, t_point point2)
 {
-	double	x;
-	double	y;
+	t_point	x_y;
 	double	step;
-	double	i;
-	double	j;
+	t_point	i_j;
 
-	x = point1.x;
-	y = point1.y;
+	x_y.x = point1.x;
+	x_y.y = point1.y;
 	step = 1;
 	if (fabs(point2.x - point1.x) >= fabs(point2.y - point1.y))
 		step = fabs(point2.x - point1.x);
 	else
 		step = fabs(point2.y - point1.y);
-	i = (point2.x - point1.x) / step;
-	j = (point2.y - point1.y) / step;
+	i_j.x = (point2.x - point1.x) / step;
+	i_j.y = (point2.y - point1.y) / step;
 	while (step > 0)
 	{
-		my_mlx_pixel_put(mlx, x, y, LINE_COLOR);
-		x += i;
-		y += j;
+		my_mlx_pixel_put(mlx, x_y.x, x_y.y, LINE_COLOR);
+		x_y.x += i_j.x;
+		x_y.y += i_j.y;
 		step--;
 	}
 }
@@ -279,7 +282,7 @@ double normalize_angle(double angle)
 	return (angle);
 }
 
-void	find_vertical(t_mlx *mlx, int id)
+void	get_ver(t_mlx *mlx, int id)
 {
 	t_point	intercept;
 	t_point	delta;
@@ -303,15 +306,12 @@ void	find_vertical(t_mlx *mlx, int id)
 			mlx->player->rays[id].found_vert_wall_hit = 1;
 			return ;
 		}
-		else
-		{
-			intercept.x += delta.x;
-			intercept.y += delta.y;
-		}
+		intercept.x += delta.x;
+		intercept.y += delta.y;
 	}
 }
 
-void	find_horizontal(t_mlx *mlx, int id)
+void	get_hor(t_mlx *mlx, int id)
 {
 	t_point	intercept;
 	t_point	delta;
@@ -335,11 +335,8 @@ void	find_horizontal(t_mlx *mlx, int id)
 			mlx->player->rays[id].found_horz_wall_hit = 1;
 			return ;
 		}
-		else
-		{
-			intercept.x += delta.x;
-			intercept.y += delta.y;
-		}
+		intercept.x += delta.x;
+		intercept.y += delta.y;
 	}
 }
 
@@ -380,6 +377,46 @@ void	init_ray(t_rays *ray, double rayAngle)
 	ray->is_ray_facing_right = !ray->is_ray_facing_left;
 }
 
+int	darken_color(unsigned int old_color, double factor)
+{
+	unsigned char red;
+	unsigned char green;
+	unsigned char blue;
+	unsigned char alpha;
+
+	blue = old_color & 255;
+	green = (old_color >> 8) & 255;
+	red = (old_color >> 16) & 255;
+	alpha = (old_color >> 24) & 255;
+	red = red * factor;
+	if (red > 255)
+		red = 255;
+	green = green * factor;
+	if (green > 255)
+		green = 255;
+	blue = blue * factor;
+	if (blue > 255)
+		blue = 255;
+	return ((alpha << 24) | (red << 16) | (green << 8) | blue);
+}
+
+t_data	*get_texture(t_mlx *mlx, int id)
+{
+	if (mlx->player->rays[id].is_hor)
+	{
+		if (mlx->player->rays[id].is_ray_facing_up)
+			return (&mlx->textures[1]);
+		else
+			return (&mlx->textures[0]);
+	}
+	else
+	{
+		if (mlx->player->rays[id].is_ray_facing_left)
+			return (&mlx->textures[2]);
+		else
+			return (&mlx->textures[3]);
+	}
+}
 
 void	project_wall(t_mlx *mlx, int id)
 {
@@ -387,29 +424,29 @@ void	project_wall(t_mlx *mlx, int id)
 	double	projected_wall_height;
 	double	val;
 	double	count;
+	double	dist;
 
 	if (mlx->player->rays[id].is_hor)
-		val = (get_wall_hit(mlx, id).x / WIDTH) * mlx->textures[0].img_width;
+		val = get_wall_hit(mlx, id).x / TILE_SIZE;
 	else
-		val = (get_wall_hit(mlx, id).y / HEIGHT) * mlx->textures[0].img_width;
-	i = 0;
+		val = get_wall_hit(mlx, id).y / TILE_SIZE;
+	val = (val - (int)val) * TILE_SIZE;
+	i = -1;
 	count = 0;
-	projected_wall_height = TILE_SIZE / mlx->player->rays[id].distance * PROJ_DIST;
-	while (i < HEIGHT)
+	dist = mlx->player->rays[id].distance;
+	projected_wall_height = (TILE_SIZE / dist) * PROJ_DIST;
+	if (projected_wall_height > HEIGHT)
+		count = (projected_wall_height  - HEIGHT) / 2;
+	while (++i < HEIGHT)
 	{
 		if (i < HEIGHT / 2 - projected_wall_height / 2)
-			my_mlx_pixel_put(mlx, id, i, 0xffff);//CEIL COLOR
-		else if (i >= HEIGHT / 2 - projected_wall_height / 2 && i <= HEIGHT / 2 + projected_wall_height / 2)
+			my_mlx_pixel_put(mlx, id, i, color_to_int(mlx->pars->c_rgb));
+		else if (i >= HEIGHT / 2 - projected_wall_height / 2 && i < HEIGHT / 2 + projected_wall_height / 2)
 			my_mlx_pixel_put(mlx, id, i,
-				get_pixel_color(&mlx->textures[0],
-					(int)id % mlx->textures[0].img_width, // for x of texture
-					i % mlx->textures[0].img_width
-					// (int)((count++ / projected_wall_height) * mlx->textures[0].img_width) // for y of texture
-					)
-				);
+				get_pixel_color(get_texture(mlx, id), val
+					, (count++ / projected_wall_height) * mlx->textures[0].img_height));
 		else
-			my_mlx_pixel_put(mlx, id, i, GROUND_COLOR); //FLOOR COLOR
-		i++;
+			my_mlx_pixel_put(mlx, id, i, color_to_int(mlx->pars->f_rgb));//FLOOR COLOR
 	}
 }
 
@@ -426,8 +463,8 @@ void CastRays(t_mlx *mlx)
 	{
 		mlx->player->rays[i].ray_id = i;
 		init_ray(&mlx->player->rays[i], rayAngle);
-		find_vertical(mlx, i);
-		find_horizontal(mlx, i);
+		get_ver(mlx, i);
+		get_hor(mlx, i);
 		wall_hit = get_wall_hit(mlx, i);
 		mlx->player->rays[i].distance = dist((t_point){mlx->player->player_center_x, mlx->player->player_center_y}
 				, wall_hit) * cos(rayAngle - mlx->player->player_angle);
@@ -485,7 +522,7 @@ void	handle_events(t_mlx *mlx)
 	if (mlx->player->key_left)
         mlx->player->player_angle = normalize_angle(mlx->player->player_angle -  ROT_SPEED);
     else if (mlx->player->key_right)
-        mlx->player->player_angle = normalize_angle(mlx->player->player_angle + ROT_SPEED);	
+        mlx->player->player_angle = normalize_angle(mlx->player->player_angle + ROT_SPEED);
 }
 
 int	 magic(t_mlx *mlx)
@@ -596,14 +633,23 @@ void	get_player_angle(t_mlx *mlx)
 
 void	texture_init(t_mlx *mlx)
 {
-	mlx->textures[0].img = mlx_xpm_file_to_image(mlx->mlx,
-			mlx->pars->no, &mlx->textures[0].img_width, &mlx->textures[0].img_height);
-	if (!mlx->textures[0].img)
-		(write(1, "Error\nImage Does not exist!", 28), exit(0));
-	mlx->textures[0].addr = mlx_get_data_addr(mlx->textures[0].img,
-			&mlx->textures[0].bits_per_pixel, &mlx->textures[0].line_length, &mlx->textures[0].endian);
-	if (!mlx->textures[0].addr)
-		(write(1, "Error\nImage Problem!", 28), exit(0));
+	int	i;
+	char	**strs;
+
+	i = -1;
+	strs = (char *[4]){mlx->pars->no, mlx->pars->so, mlx->pars->ea, mlx->pars->we};
+	while (++i < 4)
+	{
+		mlx->textures[i].img = mlx_xpm_file_to_image(mlx->mlx,
+				strs[i], &mlx->textures[i].img_width, &mlx->textures[i].img_height);
+		if (!mlx->textures[i].img)
+			(write(1, "Error\nImage Does not exist!", 28), exit(i));
+		mlx->textures[i].addr = mlx_get_data_addr(mlx->textures[i].img,
+				&mlx->textures[i].bits_per_pixel, &mlx->textures[i].line_length, &mlx->textures[i].endian);
+		if (!mlx->textures[i].addr)
+			(write(1, "Error\nImage Problem!", 28), exit(i));
+	}
+
 }
 
 t_mlx	*init(double *arr, int ac, char *av[])

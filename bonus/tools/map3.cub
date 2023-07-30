@@ -1,10 +1,10 @@
-NO ./textures/backrooms_texture.xpm
-SO ./path_to_the_south_texture
-WE ./path_to_the_west_texture
-EA ./path_to_the_east_texture
+NO ./textures/wall_2.xpm
+SO ./textures/wall_3.xpm
+WE ./textures/backrooms_texture.xpm
+EA ./textures/doom_wall.xpm
 
-F 255,220,100
-C 1,225,30
+F 195,203,110
+C 20,255,255
 
 11111111111111111111111
 10000000000000000001001

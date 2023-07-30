@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/29 20:14:39 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/30 15:03:22 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #define MOVE_SPEED 5
 #define ROT_SPEED 0.05
 #define LINE_LEN 30
-#define PROJ_DIST 200
+#define PROJ_DIST 400 // the bigger the number the bigger the walls look
 
 #define LINE_COLOR 0xfff
 #define PLAYER_COLOR 0xff0000

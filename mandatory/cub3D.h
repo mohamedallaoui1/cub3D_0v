@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/30 15:03:22 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/30 21:02:57 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,14 @@
 # include <mlx.h>
 #include <math.h>
 
-#define MOVE_SPEED 5
+#define MOVE_SPEED 3
 #define ROT_SPEED 0.05
 #define LINE_LEN 30
 #define PROJ_DIST 400 // the bigger the number the bigger the walls look
+# define TILE_SIZE 32.0
+#define FOV_ANGLE 60 * (M_PI / 180)
+#define SHADE_RANGE 400	
+
 
 #define LINE_COLOR 0xfff
 #define PLAYER_COLOR 0xff0000
@@ -43,9 +47,8 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
-# define TILE_SIZE 64.0
 
-#define FOV_ANGLE 60 * (M_PI / 180)
+
 
 
 typedef struct s_pars

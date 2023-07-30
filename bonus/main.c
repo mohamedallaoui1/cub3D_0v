@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:15:18 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/30 16:38:43 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/30 21:40:51 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-int	color_to_int(int rgb[3])
+int	int_color(int rgb[3])
 {
 	return (rgb[0] << 16 | rgb[1] << 8 | rgb[2]);
 }
@@ -377,29 +377,18 @@ void	init_ray(t_rays *ray, double rayAngle)
 	ray->is_ray_facing_right = !ray->is_ray_facing_left;
 }
 
-int	darken_color(unsigned int old_color, double factor)
+unsigned int	darken_color(int color, double dist)
 {
-	unsigned char red;
-	unsigned char green;
-	unsigned char blue;
-	unsigned char alpha;
+    unsigned int red = (color >> 16) & 0xFF;
+    unsigned int alpha = (color >> 24) & 0xFF;
+    unsigned int green = (color >> 8) & 0xFF;
+    unsigned int blue = color & 0xFF;
 
-	blue = old_color & 255;
-	green = (old_color >> 8) & 255;
-	red = (old_color >> 16) & 255;
-	alpha = (old_color >> 24) & 255;
-	red = red * factor;
-	if (red > 255)
-		red = 255;
-	green = green * factor;
-	if (green > 255)
-		green = 255;
-	blue = blue * factor;
-	if (blue > 255)
-		blue = 255;
-	return ((alpha << 24) | (red << 16) | (green << 8) | blue);
+	if (dist > 1)
+		dist = 1;
+	alpha = (unsigned int)(255 * dist);
+    return (alpha << 24 | red << 16 | green << 8 | blue);
 }
-
 t_data	*get_texture(t_mlx *mlx, int id)
 {
 	if (mlx->player->rays[id].is_hor)
@@ -421,7 +410,7 @@ t_data	*get_texture(t_mlx *mlx, int id)
 void	project_wall(t_mlx *mlx, int id)
 {
 	int		i;
-	double	projected_wall_height;
+	int		p_wall_h;
 	double	val;
 	double	count;
 	double	dist;
@@ -430,23 +419,24 @@ void	project_wall(t_mlx *mlx, int id)
 		val = get_wall_hit(mlx, id).x / TILE_SIZE;
 	else
 		val = get_wall_hit(mlx, id).y / TILE_SIZE;
-	val = (val - (int)val) * TILE_SIZE;
+	val = (val - (int)val) * get_texture(mlx, id)->img_width;
 	i = -1;
 	count = 0;
 	dist = mlx->player->rays[id].distance;
-	projected_wall_height = (TILE_SIZE / dist) * PROJ_DIST;
-	if (projected_wall_height > HEIGHT)
-		count = (projected_wall_height  - HEIGHT) / 2;
+
+	p_wall_h = round((TILE_SIZE / dist) * PROJ_DIST);
+	if (p_wall_h > HEIGHT)
+		count = (p_wall_h - HEIGHT) / 2;
 	while (++i < HEIGHT)
 	{
-		if (i < HEIGHT / 2 - projected_wall_height / 2)
-			my_mlx_pixel_put(mlx, id, i, color_to_int(mlx->pars->c_rgb));
-		else if (i >= HEIGHT / 2 - projected_wall_height / 2 && i < HEIGHT / 2 + projected_wall_height / 2)
+		if (i < HEIGHT / 2 - p_wall_h / 2)
+			my_mlx_pixel_put(mlx, id, i, int_color(mlx->pars->c_rgb));
+		else if (i >= HEIGHT / 2 - p_wall_h / 2 && i < HEIGHT / 2 + p_wall_h / 2)
 			my_mlx_pixel_put(mlx, id, i,
-				get_pixel_color(get_texture(mlx, id), val
-					, (count++ / projected_wall_height) * mlx->textures[0].img_height));
+				darken_color(get_pixel_color(get_texture(mlx, id), val
+					, (count++ / p_wall_h) * mlx->textures[0].img_height),  dist / SHADE_RANGE));
 		else
-			my_mlx_pixel_put(mlx, id, i, color_to_int(mlx->pars->f_rgb));//FLOOR COLOR
+			my_mlx_pixel_put(mlx, id, i, int_color(mlx->pars->f_rgb));//FLOOR COLOR
 	}
 }
 
@@ -695,6 +685,7 @@ int main(int ac, char **av)
 	mlx = init(arr, ac, av);
 	mlx->player->rays = malloc(WIDTH * sizeof(t_rays));
 /***********************                         ***************************/
+
 	mlx_hook(mlx->win, 17, 0L, close_window, mlx);
 	mlx_hook(mlx->win, 2, 1L << 2, control_key, mlx);
 	mlx_hook(mlx->win, 3, 1L << 2, key_released, mlx);

@@ -12,11 +12,11 @@
 
 #include "../includes/cub3D.h"
 
-int     count_lines(char *name)
+int	count_lines(char *name)
 {
-	int     i;
-	int     fd;
-	char    *line;
+	int		i;
+	int		fd;
+	char	*line;
 
 	i = 0;
 	fd = open(name, O_RDONLY);
@@ -32,13 +32,13 @@ int     count_lines(char *name)
 	return (i);
 }
 
-char    **get_content(char *name)
+char	**get_content(char *name)
 {
-	int     fd;
-	char    *line;
-	char    **file;
-	int     size;
-	int     i;
+	int		fd;
+	char	*line;
+	char	**file;
+	int		size;
+	int		i;
 
 	fd = open(name, O_RDONLY);
 	if (fd < 0)
@@ -49,7 +49,7 @@ char    **get_content(char *name)
 	line = get_next_line(fd);
 	while (line)
 	{
-		file[i] = ft_strdup(line); // new line is included in linne variable :>
+		file[i] = ft_strdup(line);
 		free(line);
 		i++;
 		line = get_next_line(fd);
@@ -58,10 +58,10 @@ char    **get_content(char *name)
 	return (file);
 }
 
-void    check_file_general_errors(char **file)
+void	check_file_general_errors(char **file)
 {
-	int     i;
-	int     j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -72,8 +72,8 @@ void    check_file_general_errors(char **file)
 		{
 			while (file[i][j] == ' ')
 				j++;
-            if (check_char(file, i, j))
-                break ;
+			if (check_char(file, i, j))
+				break ;
 			else
 				error("Error\nWrong file\n");
 			j++;
@@ -82,11 +82,11 @@ void    check_file_general_errors(char **file)
 	}
 }
 
-void    remove_newline(char **file)
+void	remove_newline(char **file)
 {
-	int     i;
-	int     j;
-	char    *tmp;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	i = 0;
 	while (file[i])
@@ -110,7 +110,7 @@ void    remove_newline(char **file)
 
 void	parsing(t_pars *pars, int ac, char **av)
 {
-	char    **file;
+	char	**file;
 
 	if (ac < 2)
 		error("Error\nNo input file\n");

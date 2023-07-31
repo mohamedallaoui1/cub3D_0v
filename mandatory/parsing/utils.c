@@ -12,7 +12,6 @@
 
 #include "../includes/cub3D.h"
 
-
 void    error(char *str)
 {
 	ft_putstr_fd(str, 2);

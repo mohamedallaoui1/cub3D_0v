@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   color_pars.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 07:22:03 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/10 07:22:05 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/07/31 11:37:40 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../cub3D.h"
+# include "./includes/cub3D.h"
 
 void    check_rgb(char **rgb)
 {

@@ -6,35 +6,63 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 15:44:00 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 09:12:13 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/31 11:37:40 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "./includes/cub3D.h"
 
-int	move_condition(t_mlx *mlx, t_point *old)
+int	up_down_condition(t_mlx *mlx, t_point *old)
 {
 	t_point	x_y;
 
 	x_y = (t_point){0, 0};
-	if (mlx->pars->map[(int)((mlx->player->player_center_y) / TILE_SIZE)]\
+	if (mlx->pars->map[(int)((mlx->player->center_y
+		+ LIMIT * sin(mlx->player->player_angle) * mlx->player->dir_forw) / TILE_SIZE)]\
 	[(int)((old->x + TILE_SIZE / 2) / TILE_SIZE)] == '1')
 	{
-		mlx->player->player_y = old->y;
+		mlx->player->pos.y = old->y;
 		x_y.y = 1;
 	}
 	if (mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / TILE_SIZE)]\
-	[(int)((mlx->player->player_center_x) / TILE_SIZE)] == '1')
+		[(int)((mlx->player->center_x + LIMIT *\
+		cos(mlx->player->player_angle) * mlx->player->dir_forw) / TILE_SIZE)] == '1')
 	{
-		mlx->player->player_x = old->x;
+		mlx->player->pos.x = old->x;
 		x_y.x = 1;
 	}
-	if (mlx->pars->map[(int)((mlx->player->player_center_y) / TILE_SIZE)]
-	[(int)((mlx->player->player_center_x) / TILE_SIZE)] == '1' && !x_y.x && !x_y.y)
+	if (mlx->pars->map[(int)((mlx->player->center_y
+		+ LIMIT * sin(mlx->player->player_angle) * mlx->player->dir_forw) / TILE_SIZE)]
+		[(int)((mlx->player->center_x + LIMIT * cos(mlx->player->player_angle)
+		* mlx->player->dir_forw) / TILE_SIZE)] == '1' && !x_y.x && !x_y.y)
+		mlx->player->pos = *old;
+	return (0);
+}
+
+int	left_right_condition(t_mlx *mlx, t_point *old)
+{
+	t_point	x_y;
+
+	x_y = (t_point){0, 0};
+	if (mlx->pars->map[(int)((mlx->player->center_y -\
+		LIMIT * cos(mlx->player->player_angle) * mlx->player->dir_side) / TILE_SIZE)]\
+		[(int)((old->x + TILE_SIZE / 2) / TILE_SIZE)] == '1')
 	{
-		mlx->player->player_x = old->x;
-		mlx->player->player_y = old->y;
+		mlx->player->pos.y = old->y;
+		x_y.y = 1;
 	}
+	if (mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / TILE_SIZE)]\
+		[(int)((mlx->player->center_x  + LIMIT *\
+		sin(mlx->player->player_angle) * mlx->player->dir_side) / TILE_SIZE)] == '1')
+	{
+		mlx->player->pos.x = old->x;
+		x_y.x = 1;
+	}
+	if (mlx->pars->map[(int)((mlx->player->center_y -
+		LIMIT  * cos(mlx->player->player_angle) * mlx->player->dir_side) / TILE_SIZE)]
+		[(int)((mlx->player->center_x + LIMIT  * sin(mlx->player->player_angle)
+		* mlx->player->dir_side) / TILE_SIZE)] == '1' && !x_y.x && !x_y.y)
+		mlx->player->pos = *old;
 	return (0);
 }
 
@@ -44,25 +72,29 @@ int up_down(t_mlx *mlx)
 	t_point	x_y;
 
 	x_y = (t_point){0, 0};
-	old.x = mlx->player->player_x;
-	old.y = mlx->player->player_y;
-    mlx->player->player_x += MOVE_SPEED * cos(mlx->player->player_angle) * mlx->player->direction_forward;
-    mlx->player->player_y += MOVE_SPEED * sin(mlx->player->player_angle) * mlx->player->direction_forward;
-	get_player_center(mlx);
-	move_condition(mlx, &old);
-    return (get_player_center(mlx), 0);
+	old.x = mlx->player->pos.x;
+	old.y = mlx->player->pos.y;
+	mlx->player->pos.x += MOVE_SPEED * cos(mlx->player->player_angle)
+		* mlx->player->dir_forw;
+	mlx->player->pos.y += MOVE_SPEED * sin(mlx->player->player_angle)
+		* mlx->player->dir_forw;
+	player_center(mlx);
+	up_down_condition(mlx, &old);
+	return (player_center(mlx), 0);
 }
 
 int left_right(t_mlx *mlx)
 {
 	t_point	old;
 
-	old.x = mlx->player->player_x;
-	old.y = mlx->player->player_y;
-    mlx->player->player_x += MOVE_SPEED * sin(mlx->player->player_angle) * mlx->player->direction_side;
-    mlx->player->player_y -= MOVE_SPEED * cos(mlx->player->player_angle) * mlx->player->direction_side;
-    get_player_center(mlx);
-	move_condition(mlx, &old);
-	get_player_center(mlx);
-    return (0);
+	old.x = mlx->player->pos.x;
+	old.y = mlx->player->pos.y;
+	mlx->player->pos.x += MOVE_SPEED * sin(mlx->player->player_angle)
+		* mlx->player->dir_side;
+	mlx->player->pos.y -= MOVE_SPEED * cos(mlx->player->player_angle)
+		* mlx->player->dir_side;
+	player_center(mlx);
+	left_right_condition(mlx, &old);
+	player_center(mlx);
+	return (0);
 }

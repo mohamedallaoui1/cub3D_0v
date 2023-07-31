@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/30 21:02:57 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/31 13:48:30 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 # include <stdio.h>
 # include <unistd.h>
-# include "./libft/libft.h"
+# include "../libft/libft.h"
 # include <mlx.h>
 #include <math.h>
 
@@ -27,7 +27,8 @@
 #define PROJ_DIST 400 // the bigger the number the bigger the walls look
 # define TILE_SIZE 32.0
 #define FOV_ANGLE 60 * (M_PI / 180)
-#define SHADE_RANGE 400	
+#define SHADE_RANGE 400
+#define LIMIT 3
 
 
 #define LINE_COLOR 0xfff
@@ -91,13 +92,13 @@ typedef struct s_rays
 	double hor_hit_y;
 	double vert_hit_x;
 	double vert_hit_y;
-	int	 is_ray_facing_up;
-	int	 is_ray_facing_down;
-	int	 is_ray_facing_left;
-	int	 is_ray_facing_right;
-	int	 found_horz_wall_hit;
-	int	 found_vert_wall_hit;
-	double distance;
+	int	 facing_up;
+	int	 facing_down;
+	int	 facing_left;
+	int	 facing_right;
+	int	 found_horz;
+	int	 found_vert;
+	double dist;
 	int		is_hor;
 }			t_rays;
 
@@ -107,27 +108,29 @@ typedef struct s_point
 	double y;
 }				t_point;
 
-typedef struct s_player
+typedef struct s_keys
 {
-	double  player_x;
-	double  player_y;
-	double  player_angle;
-	double  offset;
-	double  move_player_x;
-	double  move_player_y;
-	double  player_center_x;
-	double  player_center_y;
-	char    player_direction;
 	int     key_w;
 	int     key_s;
 	int     key_a;
 	int     key_d;
 	int     key_left;
 	int     key_right;
-	int		direction_forward;
-	int		direction_side;
-	double	dir_x;
-	double	dir_y;
+}	t_keys;
+
+typedef struct s_player
+{
+	t_point pos;
+	double  player_angle;
+	double  offset;
+	double  move_player_x;
+	double  move_player_y;
+	double  center_x;
+	double  center_y;
+	char    player_dir;
+	t_keys	keys;
+	int		dir_forw;
+	int		dir_side;
 	t_rays	*rays;
 }               t_player;
 
@@ -144,13 +147,40 @@ typedef struct s_mlx
 	t_player *player;
 }           t_mlx;
 
-void	texture_parsing(t_pars *pars, char **file);
-void	error(char *str);
-void	map_pars(t_pars *pars, char **file);
-void	color_pars(t_pars *pars, char **file);
-int		is_player(char c);
-double	normalize_angle(double angle);
-int		up_down(t_mlx *mlx);
-int		left_right(t_mlx *mlx);
-void	get_player_center(t_mlx *mlx);
+void			texture_parsing(t_pars *pars, char **file);
+void			error(char *str);
+void			map_pars(t_pars *pars, char **file);
+void			color_pars(t_pars *pars, char **file);
+int				is_player(char c);
+double			normalize_angle(double angle);
+int				up_down(t_mlx *mlx);
+int				left_right(t_mlx *mlx);
+void			player_center(t_mlx *mlx);
+void    		parsing(t_pars *pars, int ac, char **av);
+t_mlx			*init(double *arr, int ac, char *av[]);
+int				close_window(t_mlx *mlx);
+int				control_key(int keycode, t_mlx *mlx);
+int				key_released(int keycode, t_mlx *mlx);
+int				magic(t_mlx *mlx);
+void			init_ray(t_rays *ray, double rayAngle);
+void			get_ver(t_mlx *mlx, int id);
+void			get_hor(t_mlx *mlx, int id);
+t_point			get_wall_hit(t_mlx *mlx, int id);
+double			dist_(t_point p1, t_point p2);
+void			project_wall(t_mlx *mlx, int id);
+t_data			*get_texture(t_mlx *mlx, int id);
+void			map_w_h(t_vars *vars, t_pars *pars);
+double			*player_pos(char **map);
+void			set_player_dir(t_mlx *mlx);
+void			player_angle(t_mlx *mlx);
+void			texture_init(t_mlx *mlx);
+void			handle_events(t_mlx *mlx);
+void			castrays(t_mlx *mlx);
+double			init_vars(t_mlx *mlx, int id, int *p_wall_h, double *count);
+void			init_ray(t_rays *ray, double rayAngle);
+void			my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color);
+unsigned int	shading(int color, double dist);
+int				int_color(int rgb[3]);
+int				get_pixel_color(t_data *img, int x, int y);
+int 			check_char(char **file, int i, int j);
 #endif

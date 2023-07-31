@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   texture_pars.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 17:28:15 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/09 17:28:17 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/07/31 11:37:40 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3D.h"
+#include "../includes/cub3D.h"
 
 char    *get_path(char *line, char c)
 {

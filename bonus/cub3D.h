@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/30 21:02:57 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/31 11:11:39 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@
 #define PROJ_DIST 400 // the bigger the number the bigger the walls look
 # define TILE_SIZE 32.0
 #define FOV_ANGLE 60 * (M_PI / 180)
-#define SHADE_RANGE 400	
+#define SHADE_RANGE 400
+#define LIMIT 3
 
 
 #define LINE_COLOR 0xfff
@@ -91,12 +92,12 @@ typedef struct s_rays
 	double hor_hit_y;
 	double vert_hit_x;
 	double vert_hit_y;
-	int	 is_ray_facing_up;
-	int	 is_ray_facing_down;
-	int	 is_ray_facing_left;
-	int	 is_ray_facing_right;
-	int	 found_horz_wall_hit;
-	int	 found_vert_wall_hit;
+	int	 facing_up;
+	int	 facing_down;
+	int	 facing_left;
+	int	 facing_right;
+	int	 found_horz;
+	int	 found_vert;
 	double distance;
 	int		is_hor;
 }			t_rays;
@@ -109,23 +110,22 @@ typedef struct s_point
 
 typedef struct s_player
 {
-	double  player_x;
-	double  player_y;
+	t_point pos;
 	double  player_angle;
 	double  offset;
 	double  move_player_x;
 	double  move_player_y;
 	double  player_center_x;
 	double  player_center_y;
-	char    player_direction;
+	char    player_dir;
 	int     key_w;
 	int     key_s;
 	int     key_a;
 	int     key_d;
 	int     key_left;
 	int     key_right;
-	int		direction_forward;
-	int		direction_side;
+	int		dir_forw;
+	int		dir_side;
 	double	dir_x;
 	double	dir_y;
 	t_rays	*rays;
@@ -152,5 +152,5 @@ int		is_player(char c);
 double	normalize_angle(double angle);
 int		up_down(t_mlx *mlx);
 int		left_right(t_mlx *mlx);
-void	get_player_center(t_mlx *mlx);
+void	player_center(t_mlx *mlx);
 #endif

@@ -6,11 +6,11 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:27:16 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 11:37:40 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/31 14:16:10 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "./includes/cub3D.h"
+#include "./includes/cub3D.h"
 
 int	close_window(t_mlx *mlx)
 {
@@ -20,8 +20,8 @@ int	close_window(t_mlx *mlx)
 
 double	*player_pos(char **map)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	double	*arr;
 
 	i = 0;
@@ -31,8 +31,8 @@ double	*player_pos(char **map)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == 'N' || map[i][j] == 'S' ||\
-			map[i][j] == 'E' || map[i][j] == 'W')
+			if (map[i][j] == 'N' || map[i][j] == 'S' ||
+				map[i][j] == 'E' || map[i][j] == 'W')
 			{
 				arr[0] = (double)i;
 				arr[1] = (double)j;
@@ -51,7 +51,7 @@ void	player_center(t_mlx *mlx)
 	mlx->player->center_y = mlx->player->pos.y + TILE_SIZE / 2;
 }
 
-double normalize_angle(double angle)
+double	normalize_angle(double angle)
 {
 	if (angle < 0)
 		angle += (2 * M_PI);

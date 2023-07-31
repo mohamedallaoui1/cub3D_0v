@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 15:44:00 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/30 18:04:03 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/31 09:12:13 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ int	move_condition(t_mlx *mlx, t_point *old)
 	t_point	x_y;
 
 	x_y = (t_point){0, 0};
-	// until the bonus part
-	if (mlx->pars->map[(int)(mlx->player->player_center_y / TILE_SIZE)]\
+	if (mlx->pars->map[(int)((mlx->player->player_center_y) / TILE_SIZE)]\
 	[(int)((old->x + TILE_SIZE / 2) / TILE_SIZE)] == '1')
 	{
 		mlx->player->player_y = old->y;

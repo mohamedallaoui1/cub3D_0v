@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:15:18 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/30 21:40:51 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/31 09:32:23 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,7 +299,7 @@ void	get_ver(t_mlx *mlx, int id)
 		delta.y = TILE_SIZE * fabs(tan(mlx->player->rays[id].ray_angle));
 	while (intercept.x >= 0 && intercept.x < mlx->width && intercept.y >= 0 && intercept.y < mlx->height)
 	{
-		if (mlx->pars->map[(int)(intercept.y / TILE_SIZE)][(int)((intercept.x - 1 * mlx->player->rays[id].is_ray_facing_left) / TILE_SIZE)] == '1')
+		if (mlx->pars->map[(int)(intercept.y / TILE_SIZE)][(int)((intercept.x - 0.01 * mlx->player->rays[id].is_ray_facing_left) / TILE_SIZE)] == '1')
 		{
 			mlx->player->rays[id].vert_hit_x = intercept.x;
 			mlx->player->rays[id].vert_hit_y = intercept.y;
@@ -328,7 +328,7 @@ void	get_hor(t_mlx *mlx, int id)
 		delta.x = TILE_SIZE / fabs(tan(mlx->player->rays[id].ray_angle));
 	while (intercept.x >= 0 && intercept.x < mlx->width && intercept.y >= 0 && intercept.y < mlx->height)
 	{
-		if (mlx->pars->map[(int)((intercept.y - 1 * mlx->player->rays[id].is_ray_facing_up) / TILE_SIZE)][(int)((intercept.x) / TILE_SIZE)] == '1')
+		if (mlx->pars->map[(int)((intercept.y - 0.01 * mlx->player->rays[id].is_ray_facing_up) / TILE_SIZE)][(int)((intercept.x) / TILE_SIZE)] == '1')
 		{
 			mlx->player->rays[id].hor_hit_x = intercept.x;
 			mlx->player->rays[id].hor_hit_y = intercept.y;
@@ -389,6 +389,7 @@ unsigned int	darken_color(int color, double dist)
 	alpha = (unsigned int)(255 * dist);
     return (alpha << 24 | red << 16 | green << 8 | blue);
 }
+
 t_data	*get_texture(t_mlx *mlx, int id)
 {
 	if (mlx->player->rays[id].is_hor)
@@ -423,20 +424,21 @@ void	project_wall(t_mlx *mlx, int id)
 	i = -1;
 	count = 0;
 	dist = mlx->player->rays[id].distance;
-
+	if (dist == 0)
+		dist = 10;
 	p_wall_h = round((TILE_SIZE / dist) * PROJ_DIST);
 	if (p_wall_h > HEIGHT)
 		count = (p_wall_h - HEIGHT) / 2;
 	while (++i < HEIGHT)
 	{
 		if (i < HEIGHT / 2 - p_wall_h / 2)
-			my_mlx_pixel_put(mlx, id, i, int_color(mlx->pars->c_rgb));
+			my_mlx_pixel_put(mlx, id, i, darken_color(int_color(mlx->pars->c_rgb), (double)i / (double)(HEIGHT / 2)));
 		else if (i >= HEIGHT / 2 - p_wall_h / 2 && i < HEIGHT / 2 + p_wall_h / 2)
 			my_mlx_pixel_put(mlx, id, i,
 				darken_color(get_pixel_color(get_texture(mlx, id), val
 					, (count++ / p_wall_h) * mlx->textures[0].img_height),  dist / SHADE_RANGE));
 		else
-			my_mlx_pixel_put(mlx, id, i, int_color(mlx->pars->f_rgb));//FLOOR COLOR
+			my_mlx_pixel_put(mlx, id, i, darken_color(int_color(mlx->pars->f_rgb), (double)(HEIGHT / 2) / (double)i));
 	}
 }
 
@@ -613,9 +615,9 @@ void	get_player_angle(t_mlx *mlx)
 {
     if (mlx->player->player_direction == 'N')
         mlx->player->player_angle = 3 * M_PI / 2;
-    else if (mlx->player->player_direction == 'E')
-        mlx->player->player_angle = M_PI / 2;
     else if (mlx->player->player_direction == 'S')
+        mlx->player->player_angle = M_PI / 2;
+    else if (mlx->player->player_direction == 'E')
         mlx->player->player_angle = 0;
     else if (mlx->player->player_direction == 'W')
         mlx->player->player_angle = M_PI;

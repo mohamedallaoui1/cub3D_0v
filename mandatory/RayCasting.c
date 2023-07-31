@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:08:39 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 13:47:02 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/31 18:30:16 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	get_hor(t_mlx *mlx, int id)
 	mlx->player->center_y) / tan(mlx->player->rays[id].ray_angle);
 	delta.y = TILE_SIZE * (1 - 2 * (mlx->player->rays[id].facing_up));
 	delta.x = (TILE_SIZE / fabs(tan(mlx->player->rays[id].ray_angle)))
-			* (1 - 2 * (mlx->player->rays[id].facing_left));
+		* (1 - 2 * (mlx->player->rays[id].facing_left));
 	while (intercept.x >= 0 && intercept.x < mlx->width && intercept.y >= \
 	0 && intercept.y < mlx->height)
 	{

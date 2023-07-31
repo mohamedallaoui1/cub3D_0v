@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 15:44:00 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 11:37:40 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/07/31 13:35:09 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,55 +18,66 @@ int	up_down_condition(t_mlx *mlx, t_point *old)
 
 	x_y = (t_point){0, 0};
 	if (mlx->pars->map[(int)((mlx->player->center_y
-		+ LIMIT * sin(mlx->player->player_angle) * mlx->player->dir_forw) / TILE_SIZE)]\
-	[(int)((old->x + TILE_SIZE / 2) / TILE_SIZE)] == '1')
+				+ LIMIT * sin(mlx->player->player_angle)
+				* mlx->player->dir_forw) / TILE_SIZE)]
+			[(int)((old->x + TILE_SIZE / 2) / TILE_SIZE)] == '1')
 	{
 		mlx->player->pos.y = old->y;
 		x_y.y = 1;
 	}
-	if (mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / TILE_SIZE)]\
-		[(int)((mlx->player->center_x + LIMIT *\
-		cos(mlx->player->player_angle) * mlx->player->dir_forw) / TILE_SIZE)] == '1')
+	if (mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / TILE_SIZE)]
+		[(int)((mlx->player->center_x + LIMIT
+			* cos(mlx->player->player_angle)
+			* mlx->player->dir_forw) / TILE_SIZE)] == '1')
 	{
 		mlx->player->pos.x = old->x;
 		x_y.x = 1;
 	}
-	if (mlx->pars->map[(int)((mlx->player->center_y
-		+ LIMIT * sin(mlx->player->player_angle) * mlx->player->dir_forw) / TILE_SIZE)]
-		[(int)((mlx->player->center_x + LIMIT * cos(mlx->player->player_angle)
-		* mlx->player->dir_forw) / TILE_SIZE)] == '1' && !x_y.x && !x_y.y)
+	if (mlx->pars->map[(int)((mlx->player->center_y + LIMIT \
+	* sin(mlx->player->player_angle) * mlx->player->dir_forw) / TILE_SIZE)]
+	[(int)((mlx->player->center_x + LIMIT * cos(mlx->player->player_angle)
+	* mlx->player->dir_forw) / TILE_SIZE)] == '1' && !x_y.x && !x_y.y)
 		mlx->player->pos = *old;
 	return (0);
+}
+
+void	check_and_slide(t_mlx *mlx, t_point	x_y, t_point *old)
+{
+	if (mlx->pars->map[(int)((mlx->player->center_y - \
+	LIMIT * cos(mlx->player->player_angle) * \
+	mlx->player->dir_side) / TILE_SIZE)]
+	[(int)((mlx->player->center_x + LIMIT * sin(mlx->player->player_angle)
+	* mlx->player->dir_side) / TILE_SIZE)] == '1' && !x_y.x && !x_y.y)
+		mlx->player->pos = *old;
 }
 
 int	left_right_condition(t_mlx *mlx, t_point *old)
 {
 	t_point	x_y;
+	t_point	i_j;
 
 	x_y = (t_point){0, 0};
-	if (mlx->pars->map[(int)((mlx->player->center_y -\
-		LIMIT * cos(mlx->player->player_angle) * mlx->player->dir_side) / TILE_SIZE)]\
-		[(int)((old->x + TILE_SIZE / 2) / TILE_SIZE)] == '1')
+	i_j.y = ((mlx->player->center_y - LIMIT * cos(mlx->player->player_angle) * \
+	mlx->player->dir_side) / TILE_SIZE);
+	i_j.x = ((old->x + TILE_SIZE / 2) / TILE_SIZE);
+	if (mlx->pars->map[(int)i_j.y][(int)i_j.x] == '1')
 	{
 		mlx->player->pos.y = old->y;
 		x_y.y = 1;
 	}
-	if (mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / TILE_SIZE)]\
-		[(int)((mlx->player->center_x  + LIMIT *\
-		sin(mlx->player->player_angle) * mlx->player->dir_side) / TILE_SIZE)] == '1')
+	if (mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / \
+	TILE_SIZE)][(int)((mlx->player->center_x + LIMIT * \
+	sin(mlx->player->player_angle) * mlx->player->dir_side) \
+	/ TILE_SIZE)] == '1')
 	{
 		mlx->player->pos.x = old->x;
 		x_y.x = 1;
 	}
-	if (mlx->pars->map[(int)((mlx->player->center_y -
-		LIMIT  * cos(mlx->player->player_angle) * mlx->player->dir_side) / TILE_SIZE)]
-		[(int)((mlx->player->center_x + LIMIT  * sin(mlx->player->player_angle)
-		* mlx->player->dir_side) / TILE_SIZE)] == '1' && !x_y.x && !x_y.y)
-		mlx->player->pos = *old;
+	check_and_slide(mlx, x_y, old);
 	return (0);
 }
 
-int up_down(t_mlx *mlx)
+int	up_down(t_mlx *mlx)
 {
 	t_point	old;
 	t_point	x_y;
@@ -83,7 +94,7 @@ int up_down(t_mlx *mlx)
 	return (player_center(mlx), 0);
 }
 
-int left_right(t_mlx *mlx)
+int	left_right(t_mlx *mlx)
 {
 	t_point	old;
 

@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/01 14:05:05 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/01 15:53:17 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
+# define HALF_WIN 100 // for safe area for the mouse
 
 typedef struct s_pars
 {
@@ -103,12 +104,6 @@ typedef struct s_keys
 	int	key_right;
 }		t_keys;
 
-typedef struct s_mouse
-{
-	int	x;
-	int	y;
-}		t_mouse;
-
 typedef struct s_player
 {
 	t_point	pos;
@@ -125,6 +120,13 @@ typedef struct s_player
 	t_rays	*rays;
 }		t_player;
 
+typedef struct s_mouse
+{
+	double	x;
+	int	y;
+	int	which_side;
+}			t_mouse;
+
 typedef struct s_mlx
 {
 	void		*mlx;
@@ -132,11 +134,11 @@ typedef struct s_mlx
 	int			width;
 	int			height;
 	t_data		img;
-	t_mouse		mouse;
 	t_data		textures[4];
 	t_pars		*pars;
 	t_vars		*vars;
 	t_player	*player;
+	t_mouse		mouse;
 }		t_mlx;
 
 void			texture_parsing(t_pars *pars, char **file);

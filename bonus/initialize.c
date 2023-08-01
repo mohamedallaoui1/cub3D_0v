@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 12:55:20 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 12:59:18 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/01 15:26:29 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ void	keys_init(t_mlx *mlx)
 	mlx->player->dir_side = 0;
 	mlx->player->keys.key_left = 0;
 	mlx->player->keys.key_right = 0;
+	mlx->mouse.x = 0;
+	mlx->mouse.y = 0;
+	mlx->mouse.which_side = 0;
 }
 
 t_mlx	*init(double *arr, int ac, char *av[])

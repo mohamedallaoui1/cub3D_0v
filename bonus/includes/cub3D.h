@@ -17,8 +17,9 @@
 # include "../libft/libft.h"
 # include <mlx.h>
 # include <math.h>
-# define MOVE_SPEED 3
-# define ROT_SPEED 0.05
+
+# define MOVE_SPEED 2
+# define ROT_SPEED 0.02
 # define LINE_LEN 30
 # define PROJ_DIST 400 // the bigger the number the bigger the walls look
 # define TILE_SIZE 32.0
@@ -40,6 +41,7 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
+# define HALF_WIN 200
 
 typedef struct s_pars
 {
@@ -119,6 +121,13 @@ typedef struct s_player
 	t_rays	*rays;
 }		t_player;
 
+typedef struct s_mouse
+{
+	double	x;
+	int	y;
+	int	which_side;
+}			t_mouse;
+
 typedef struct s_mlx
 {
 	void		*mlx;
@@ -130,6 +139,7 @@ typedef struct s_mlx
 	t_pars		*pars;
 	t_vars		*vars;
 	t_player	*player;
+	t_mouse		*mouse;
 }		t_mlx;
 
 void			texture_parsing(t_pars *pars, char **file);

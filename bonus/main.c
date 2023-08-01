@@ -53,6 +53,18 @@ void	player_angle(t_mlx *mlx)
 		mlx->player->player_angle = M_PI;
 }
 
+int	mouse_control(int x, int y, t_mlx *mlx)
+{
+	mlx->mouse->x = 0.00001;
+	if (x < WIDTH / 2 - 100)
+		mlx->mouse->which_side = -1.0;
+	else
+		mlx->mouse->which_side = 1.0;
+	if ((x < 0 || x > WIDTH || (x >= WIDTH / 2 - HALF_WIN && x <= WIDTH / 2 + HALF_WIN) || y < 0 || y > HEIGHT))
+		mlx->mouse->which_side = 0.0;
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
 	t_mlx		*mlx;
@@ -62,6 +74,7 @@ int	main(int ac, char **av)
 	mlx = init(arr, ac, av);
 	mlx->player->rays = malloc(WIDTH * sizeof(t_rays));
 	mlx_hook(mlx->win, 17, 0L, close_window, mlx);
+	mlx_hook(mlx->win, 6, 0L, mouse_control, mlx);
 	mlx_hook(mlx->win, 2, 1L << 2, control_key, mlx);
 	mlx_hook(mlx->win, 3, 1L << 2, key_released, mlx);
 	mlx_loop_hook(mlx->mlx, magic, mlx);

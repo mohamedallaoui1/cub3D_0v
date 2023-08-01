@@ -18,12 +18,12 @@ void	handle_events(t_mlx *mlx)
 		up_down(mlx);
 	if (mlx->player->keys.key_a || mlx->player->keys.key_d)
 		left_right(mlx);
-	if (mlx->player->keys.key_left)
+	if (mlx->player->keys.key_left || mlx->mouse->which_side == -1)
 		mlx->player->player_angle
-			= normalize_angle(mlx->player->player_angle - ROT_SPEED);
-	else if (mlx->player->keys.key_right)
+			= normalize_angle(mlx->player->player_angle  - ROT_SPEED + (mlx->mouse->x * mlx->mouse->which_side));
+	else if (mlx->player->keys.key_right ||  mlx->mouse->which_side)
 		mlx->player->player_angle
-			= normalize_angle(mlx->player->player_angle + ROT_SPEED);
+			= normalize_angle(mlx->player->player_angle + ROT_SPEED + (mlx->mouse->x * mlx->mouse->which_side));
 }
 
 void	wsa(t_mlx *mlx, int keycode)

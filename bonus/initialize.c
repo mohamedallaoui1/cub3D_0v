@@ -22,6 +22,9 @@ void	keys_init(t_mlx *mlx)
 	mlx->player->dir_side = 0;
 	mlx->player->keys.key_left = 0;
 	mlx->player->keys.key_right = 0;
+	mlx->mouse->x = 0;
+	mlx->mouse->y = 0;
+	mlx->mouse->which_side = 0;
 }
 
 t_mlx	*init(double *arr, int ac, char *av[])
@@ -32,6 +35,7 @@ t_mlx	*init(double *arr, int ac, char *av[])
 	mlx->pars = malloc(sizeof(t_pars));
 	mlx->vars = malloc(sizeof(t_vars));
 	mlx->player = malloc(sizeof(t_player));
+	mlx->mouse = malloc(sizeof(t_mouse));
 	(parsing(mlx->pars, ac, av), map_w_h(mlx->vars, mlx->pars));
 	arr = player_pos(mlx->pars->map);
 	mlx->player->pos.y = arr[0] * TILE_SIZE;

@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/31 18:35:07 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/01 14:05:05 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@
 # include "../libft/libft.h"
 # include <mlx.h>
 # include <math.h>
-# define MOVE_SPEED 3
-# define ROT_SPEED 0.05
+# define MOVE_SPEED 3	// 3px per frame  (60fps is the max i think)
+# define ROT_SPEED 0.05 // 0.05 radiant 
 # define LINE_LEN 30
 # define PROJ_DIST 400 // the bigger the number the bigger the walls look
 # define TILE_SIZE 32.0
 # define FOV_ANGLE 1.0471975512 //(60 * (3.1415926535897 / 180))
-# define SHADE_RANGE 400
-# define LIMIT 3
+# define SHADE_RANGE 400	// the range that the player can see is per px
+# define LIMIT 3 // the limit px between the playerand the wall
 # define LINE_COLOR 0xfff
 # define PLAYER_COLOR 0xff0000
 # define WALL_COLOR 0x943a5b
@@ -103,6 +103,12 @@ typedef struct s_keys
 	int	key_right;
 }		t_keys;
 
+typedef struct s_mouse
+{
+	int	x;
+	int	y;
+}		t_mouse;
+
 typedef struct s_player
 {
 	t_point	pos;
@@ -126,6 +132,7 @@ typedef struct s_mlx
 	int			width;
 	int			height;
 	t_data		img;
+	t_mouse		mouse;
 	t_data		textures[4];
 	t_pars		*pars;
 	t_vars		*vars;
@@ -173,4 +180,5 @@ char			**get_map(char **file);
 void			check_map(char **map);
 void			check_double(char **map);
 void			validate_map(char **map);
+int				mouse_control(int x, int y, t_mlx *mlx);
 #endif

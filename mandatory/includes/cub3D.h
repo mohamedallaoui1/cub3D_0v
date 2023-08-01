@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/31 18:35:07 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/01 15:11:21 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define TILE_SIZE 32.0
 # define FOV_ANGLE 1.0471975512 //(60 * (3.1415926535897 / 180))
 # define SHADE_RANGE 400
-# define LIMIT 3
+# define LIMIT 5
 # define LINE_COLOR 0xfff
 # define PLAYER_COLOR 0xff0000
 # define WALL_COLOR 0x943a5b

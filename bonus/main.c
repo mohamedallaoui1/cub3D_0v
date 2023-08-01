@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:15:18 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/31 12:01:06 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/01 14:04:15 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	main(int ac, char **av)
 	mlx_hook(mlx->win, 17, 0L, close_window, mlx);
 	mlx_hook(mlx->win, 2, 1L << 2, control_key, mlx);
 	mlx_hook(mlx->win, 3, 1L << 2, key_released, mlx);
+	mlx_hook(mlx->win, 6, 1L << 2, mouse_control, mlx);
 	mlx_loop_hook(mlx->mlx, magic, mlx);
 	mlx_loop(mlx->mlx);
 	return (0);

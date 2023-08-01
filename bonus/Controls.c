@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:22:23 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 12:51:59 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/01 14:05:44 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,9 @@ int	key_released(int keycode, t_mlx *mlx)
 	if (keycode == KEY_RIGHT)
 		mlx->player->keys.key_right = 0;
 	return (0);
+}
+
+int	mouse_control(int x, int y, t_mlx *mlx)
+{
+	
 }

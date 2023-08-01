@@ -40,6 +40,7 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
+# define PLAYER_SIZE 8
 # define HALF_WIN 100 // for safe area for the mouse
 
 typedef struct s_pars

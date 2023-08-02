@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/02 10:31:25 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/02 15:36:22 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 # include "../libft/libft.h"
 # include <mlx.h>
 # include <math.h>
-# define MOVE_SPEED 3	// 3px per frame  (60fps is the max i think)
+# define MOVE_SPEED 3	// px per frame  (60fps is the max i think)
 # define ROT_SPEED 0.05 // 0.05 radiant 
 # define LINE_LEN 30
-# define PROJ_DIST 400 // the bigger the number the bigger the walls look
+# define PROJ_DIST 300 // the bigger the number the bigger the walls look
 # define TILE_SIZE 32.0
 # define FOV_ANGLE 1.0471975512 //(60 * (3.1415926535897 / 180))
 # define SHADE_RANGE 400	// the range that the player can see per px
@@ -41,6 +41,8 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
+# define PLAYER_SIZE 8
+# define HALF_WIN 100 // for safe area for the mouse
 
 typedef struct s_pars
 {
@@ -183,4 +185,5 @@ void			check_map(char **map);
 void			check_double(char **map);
 void			validate_map(char **map);
 int				mouse_control(int x, int y, t_mlx *mlx);
+unsigned int	reverse_color(unsigned int color);
 #endif

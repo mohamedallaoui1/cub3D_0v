@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:27:16 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 14:16:10 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/02 15:30:45 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,16 @@ double	normalize_angle(double angle)
 	if (angle > (2 * M_PI))
 		angle -= (2 * M_PI);
 	return (angle);
+}
+
+unsigned int	reverse_color(unsigned int color)
+{
+	unsigned char red;
+	unsigned char blue;
+	unsigned char green;
+
+	red = (unsigned char)(255 - (color >> 16));
+	green = (unsigned char)(255 - (color >> 8));
+	blue = (unsigned char)(255 - color);
+	return (red << 16 | green << 8 | blue);
 }

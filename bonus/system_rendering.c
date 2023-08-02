@@ -6,17 +6,77 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 10:47:59 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 14:15:25 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/02 15:34:12 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/cub3D.h"
+
+void	draw_player(t_mlx *mlx)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	while (x < PLAYER_SIZE)
+	{
+		y = 0;
+		while (y < PLAYER_SIZE)
+		{
+			my_mlx_pixel_put(mlx, x  + (WIDTH / 10) / 2, y + (HEIGHT / 10) / 2,
+				reverse_color((unsigned int)get_pixel_color(&mlx->img, x  + (WIDTH / 10) / 2, y + (HEIGHT / 10) / 2)));
+			y++;
+		}
+		x++;
+	}
+}
+void	draw_square(t_mlx *mlx, int x, int y, int color)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < 10)
+	{
+		j = 0;
+		while (j < 10)
+		{
+			my_mlx_pixel_put(mlx, x + i, y + j, color);
+			j++;
+		}
+		i++;
+	}
+}
+
+void	draw_minimap(t_mlx *mlx)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (mlx->pars->map[y])
+	{
+		x = 0;
+		while (mlx->pars->map[y][x])
+		{
+			x++;	
+		}
+		y++;
+	}
+}
+
+void	minimap(t_mlx *mlx)
+{
+	draw_player(mlx);
+	draw_minimap(mlx);
+}
 
 int	magic(t_mlx *mlx)
 {
 	mlx_clear_window(mlx->mlx, mlx->win);
 	handle_events(mlx);
 	castrays(mlx);
+	minimap(mlx);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
 	return (0);
 }

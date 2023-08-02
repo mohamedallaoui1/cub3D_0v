@@ -48,22 +48,39 @@ void	draw_square(t_mlx *mlx, int x, int y, int color)
 	}
 }
 
-void	draw_minimap(t_mlx *mlx)
+void draw_minimap(t_mlx *mlx)
 {
-	int	x;
-	int	y;
+    int player_x = mlx->player->center_x;
+    int player_y = mlx->player->center_y;
+    int map_start_x = player_x - 100;
+    int map_start_y = player_y - 100;
+    int x = map_start_x / TILE_SIZE;
+    int y = map_start_y / TILE_SIZE;
 
-	y = 0;
-	while (mlx->pars->map[y])
-	{
-		x = 0;
-		while (mlx->pars->map[y][x])
-		{
-			x++;	
-		}
-		y++;
-	}
+    if (x < 0)
+        x = 0;
+    else if (x >= mlx->vars->map_w)
+        x = mlx->vars->map_w - 1;
+
+    if (y < 0)
+        y = 0;
+    else if (y >= mlx->vars->map_h)
+        y = mlx->vars->map_h - 1;
+
+    while (y < mlx->vars->map_h && y < (player_y + 100) / TILE_SIZE)
+    {
+        x = map_start_x / TILE_SIZE;
+        while (x < mlx->vars->map_w && x < (player_x + 100) / TILE_SIZE)
+        {
+            if (x >= 0 && y >= 0 && (mlx->pars->map[y][x] == '1' || mlx->pars->map[y][x] == ' '))
+                draw_square(mlx, x * 10, y * 10, WALL_COLOR);
+            x++;
+        }
+        y++;
+    }
+
 }
+
 
 void	minimap(t_mlx *mlx)
 {

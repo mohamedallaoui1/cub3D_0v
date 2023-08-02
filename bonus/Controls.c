@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:22:23 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/01 15:50:25 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/01 15:57:12 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	handle_events(t_mlx *mlx)
 	double	percent;
 	double	m_dist;
 
-	m_dist = fabs(mlx->mouse.x  - (WIDTH/2 + HALF_WIN * mlx->mouse.which_side));
+	m_dist = fabs(mlx->mouse.x  - (WIDTH/2 + SAFE_AREA * mlx->mouse.which_side));
 	percent = m_dist / (WIDTH / 2);
 	if (mlx->player->keys.key_left || mlx->player->keys.key_right || percent > 1)
 		percent = 1;

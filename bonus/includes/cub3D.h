@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/01 15:53:17 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/02 10:31:25 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@
 # define PROJ_DIST 400 // the bigger the number the bigger the walls look
 # define TILE_SIZE 32.0
 # define FOV_ANGLE 1.0471975512 //(60 * (3.1415926535897 / 180))
-# define SHADE_RANGE 400	// the range that the player can see is per px
-# define LIMIT 3 // the limit px between the playerand the wall
+# define SHADE_RANGE 400	// the range that the player can see per px
+# define LIMIT 3 // the limit px between the player and the wall
+# define SAFE_AREA 100 // for the mouse's safe area
 # define LINE_COLOR 0xfff
 # define PLAYER_COLOR 0xff0000
 # define WALL_COLOR 0x943a5b
@@ -40,7 +41,6 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
-# define HALF_WIN 100 // for safe area for the mouse
 
 typedef struct s_pars
 {

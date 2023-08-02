@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:15:18 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/01 15:52:47 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/01 15:57:12 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ void	player_angle(t_mlx *mlx)
 int	mouse_control(int x, int y, t_mlx *mlx)
 {
 	mlx->mouse.x = x;
-	if (x < WIDTH / 2 - HALF_WIN)
+	if (x < WIDTH / 2 - SAFE_AREA)
 		mlx->mouse.which_side = -1;
 	else
 		mlx->mouse.which_side = 1;
-	if ((x < 0 || x > WIDTH || (x >= WIDTH / 2 - HALF_WIN
-			&& x <= WIDTH / 2 + HALF_WIN) || y < 0 || y > HEIGHT))
+	if ((x < 0 || x > WIDTH || (x >= WIDTH / 2 - SAFE_AREA
+			&& x <= WIDTH / 2 + SAFE_AREA) || y < 0 || y > HEIGHT))
 		mlx->mouse.which_side = 0;
 	return (0);
 }

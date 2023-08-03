@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/02 15:51:36 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/03 17:05:29 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,14 @@
 # include "../libft/libft.h"
 # include <mlx.h>
 # include <math.h>
+# define WALL_MULIP 3
 # define MOVE_SPEED 3	// px per frame  (60fps is the max i think)
 # define ROT_SPEED 0.05 // 0.05 radiant 
 # define LINE_LEN 30
-# define PROJ_DIST 300 // the bigger the number the bigger the walls look
+# define PROJ_DIST 277 // the bigger the number the bigger the walls look
 # define TILE_SIZE 32.0
 # define FOV_ANGLE 1.0471975512 //(60 * (3.1415926535897 / 180))
-# define SHADE_RANGE 400	// the range that the player can see per px
+# define SHADE_RANGE 600	// the range that the player can see per px
 # define LIMIT 3 // the limit px between the player and the wall
 # define SAFE_AREA 100 // for the mouse's safe area
 # define LINE_COLOR 0xfff
@@ -31,8 +32,8 @@
 # define WALL_COLOR 0x943a5b
 # define SPACE_COLOR 0x000000
 # define GROUND_COLOR 0xC3CB6E
-# define WIDTH 2000
-# define HEIGHT 1000
+# define WIDTH 1000
+# define HEIGHT 700
 # define RIGHT -1
 # define LEFT  1
 # define KEY_W 13
@@ -41,7 +42,8 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
-# define PLAYER_SIZE 8
+# define PLAYER_SIZE 5
+# define MAP_SIZE 200
 # define HALF_WIN 100 // for safe area for the mouse
 
 typedef struct s_pars

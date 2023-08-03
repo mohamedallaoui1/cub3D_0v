@@ -6,26 +6,26 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 10:47:59 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/03 15:17:43 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/03 22:49:07 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/cub3D.h"
 
-void	draw_player(t_mlx *mlx)
+void	draw_player(t_mlx *mlx, int i, int j)
 {
 	int	x;
 	int	y;
 
-	x = 0;
+	x = i;
 	while (x < PLAYER_SIZE)
 	{
-		y = 0;
+		y = j;
 		while (y < PLAYER_SIZE)
 		{
-			my_mlx_pixel_put(mlx, x  + (WIDTH / 10) / 2, y + (HEIGHT / 10) / 2,
+			my_mlx_pixel_put(mlx, x, y,
 				reverse_color(get_pixel_color(&mlx->img,
-					x  + (WIDTH / 10) / 2, y + (HEIGHT / 10) / 2)));
+					x, y)));
 			y++;
 		}
 		x++;
@@ -37,12 +37,12 @@ void	draw_square(t_mlx *mlx, int x, int y, int color)
 	int	j;
 
 	i = 0;
-	while (i < 10)
+	while (i < 5)
 	{
 		j = 0;
-		while (j < 10)
+		while (j < 5)
 		{
-			my_mlx_pixel_put(mlx, x + i, y + j, color);
+			my_mlx_pixel_put(mlx, (x + i), (y + j), color);
 			j++;
 		}
 		i++;
@@ -51,43 +51,37 @@ void	draw_square(t_mlx *mlx, int x, int y, int color)
 
 void draw_minimap(t_mlx *mlx)
 {
-    int player_x = mlx->player->center_x;
-    int player_y = mlx->player->center_y;
-    int map_start_x = player_x - 100;
-    int map_start_y = player_y - 100;
-    int x = map_start_x / TILE_SIZE;
-    int y = map_start_y / TILE_SIZE;
+	int	x;
+	int	y;
+	int start_x;
+	int start_y;
 
-    if (x < 0)
-        x = 0;
-    else if (x >= mlx->vars->map_w)
-        x = mlx->vars->map_w - 1;
-
-    if (y < 0)
-        y = 0;
-    else if (y >= mlx->vars->map_h)
-        y = mlx->vars->map_h - 1;
-
-    while (y < mlx->vars->map_h && y < (player_y + 100) / TILE_SIZE)
-    {
-        x = map_start_x / TILE_SIZE;
-        while (x < mlx->vars->map_w && x < (player_x + 100) / TILE_SIZE)
-        {
-            if (x >= 0 && y >= 0 && (mlx->pars->map[y][x] == '1' || mlx->pars->map[y][x] == ' '))
-                draw_square(mlx, x * 10, y * 10, WALL_COLOR);
-            x++;
-        }
-        y++;
-    }
-
+	start_x = (mlx->player->center_x - MAP_SIZE / 2) * 0.1;
+	start_y = (mlx->player->center_y - MAP_SIZE / 2) * 0.1;
+	if (start_x < 0)
+		start_x = 0;
+	if (start_y < 0)
+		start_y = 0;
+	x = 0;
+	while (x < WIDTH * 0.1)
+	{
+		y = 0;
+		while (y < HEIGHT * 0.1)
+		{
+			if (mlx->pars->map[(int)((start_y + y) / TILE_SIZE)][(int)((start_x + x) / TILE_SIZE)] == '1')
+				draw_square(mlx, x, y, WALL_COLOR);
+			y++;
+		}
+		x++;
+	}
+	
 }
-
 
 void	minimap(t_mlx *mlx)
 {
 	(void)mlx;
-	// draw_minimap(mlx);
-	// draw_player(mlx);
+	draw_minimap(mlx);
+	draw_player(mlx, mlx->player->center_x  * 0.1, mlx->player->center_y * 0.1);
 }
 
 int	magic(t_mlx *mlx)

@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 12:55:20 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/03 15:09:55 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/03 20:52:17 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	texture_init(t_mlx *mlx)
 		mlx->pars->ea, mlx->pars->we};
 	while (++i < 4)
 	{
+		printf("xpm file (%s) : loading...\n", strs[i]);
 		mlx->textures[i].img = mlx_xpm_file_to_image(mlx->mlx,
 				strs[i], &mlx->textures[i].img_width,
 				&mlx->textures[i].img_height);
@@ -72,7 +73,9 @@ void	texture_init(t_mlx *mlx)
 				&mlx->textures[i].line_length, &mlx->textures[i].endian);
 		if (!mlx->textures[i].addr)
 			(write(1, "Error\nImage Problem!", 28), exit(i));
+		printf("xpm file (%s) : loaded!\n", strs[i]);
 	}
+	printf("DONE loading textures!\n");
 }
 
 void	init_ray(t_rays *ray, double rayAngle)
@@ -96,7 +99,7 @@ double	init_vars(t_mlx *mlx, int id, int *p_wall_h, double *count)
 		val = get_wall_hit(mlx, id).y / TILE_SIZE;
 	val = (val - (int)val) * get_texture(mlx, id)->img_width;
 	*count = 0;
-	*p_wall_h = ((TILE_SIZE / mlx->player->rays[id].dist) * PROJ_DIST) * 2.5;
+	*p_wall_h = ((TILE_SIZE / mlx->player->rays[id].dist) * PROJ_DIST) * WALL_MULIP;
 	if (*p_wall_h > HEIGHT)
 		*count = (*p_wall_h - HEIGHT) / 2;
 	return (val);

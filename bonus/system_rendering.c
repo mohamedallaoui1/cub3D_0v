@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 10:47:59 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/02 15:34:12 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/03 15:17:43 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	draw_player(t_mlx *mlx)
 		while (y < PLAYER_SIZE)
 		{
 			my_mlx_pixel_put(mlx, x  + (WIDTH / 10) / 2, y + (HEIGHT / 10) / 2,
-				reverse_color((unsigned int)get_pixel_color(&mlx->img, x  + (WIDTH / 10) / 2, y + (HEIGHT / 10) / 2)));
+				reverse_color(get_pixel_color(&mlx->img,
+					x  + (WIDTH / 10) / 2, y + (HEIGHT / 10) / 2)));
 			y++;
 		}
 		x++;
@@ -67,8 +68,9 @@ void	draw_minimap(t_mlx *mlx)
 
 void	minimap(t_mlx *mlx)
 {
-	draw_player(mlx);
-	draw_minimap(mlx);
+	(void)mlx;
+	// draw_minimap(mlx);
+	// draw_player(mlx);
 }
 
 int	magic(t_mlx *mlx)
@@ -119,7 +121,7 @@ void	project_wall(t_mlx *mlx, int id)
 			my_mlx_pixel_put(mlx, id, i,
 				shading(get_pixel_color(
 						get_texture(mlx, id), val, (count++ / p_wall_h)
-						* mlx->textures[0].img_height),
+						* get_texture(mlx, id)->img_height),
 					mlx->player->rays[id].dist / SHADE_RANGE));
 		else
 			my_mlx_pixel_put(mlx, id, i, shading(

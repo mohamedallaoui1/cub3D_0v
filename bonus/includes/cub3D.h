@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/02 15:36:22 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/02 15:51:36 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ typedef struct s_pars
 	int		*c_rgb;
 	char	**map;
 }		t_pars;
+
+typedef struct s_limit
+{
+	int	min;
+	int	max;
+}		t_limit;
 
 typedef struct s_data
 {

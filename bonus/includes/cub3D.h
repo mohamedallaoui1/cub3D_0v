@@ -45,6 +45,7 @@
 # define PLAYER_SIZE 5
 # define MAP_SIZE 200
 # define HALF_WIN 100 // for safe area for the mouse
+# define MAP_INCR 3
 
 typedef struct s_pars
 {

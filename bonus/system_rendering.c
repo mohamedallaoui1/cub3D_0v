@@ -18,10 +18,10 @@ void	draw_player(t_mlx *mlx, int i, int j)
 	int	y;
 
 	x = i;
-	while (x < PLAYER_SIZE)
+	while (x < PLAYER_SIZE + i)
 	{
 		y = j;
-		while (y < PLAYER_SIZE)
+		while (y < PLAYER_SIZE + j)
 		{
 			my_mlx_pixel_put(mlx, x, y,
 				reverse_color(get_pixel_color(&mlx->img,
@@ -37,10 +37,10 @@ void	draw_square(t_mlx *mlx, int x, int y, int color)
 	int	j;
 
 	i = 0;
-	while (i < 5)
+	while (i < MAP_INCR)
 	{
 		j = 0;
-		while (j < 5)
+		while (j < MAP_INCR)
 		{
 			my_mlx_pixel_put(mlx, (x + i), (y + j), color);
 			j++;
@@ -48,50 +48,52 @@ void	draw_square(t_mlx *mlx, int x, int y, int color)
 		i++;
 	}
 }
-
 void draw_minimap(t_mlx *mlx)
 {
 	int	x;
 	int	y;
-	int start_x;
-	int start_y;
+    int player_x = mlx->player->center_x;
+    int player_y = mlx->player->center_y;
+    int map_start_x = player_x - 100;
+    int map_start_y = player_y - 100;
 
-	start_x = (mlx->player->center_x - MAP_SIZE / 2) * 0.1;
-	start_y = (mlx->player->center_y - MAP_SIZE / 2) * 0.1;
-	if (start_x < 0)
-		start_x = 0;
-	if (start_y < 0)
-		start_y = 0;
 	x = 0;
-	while (x < WIDTH * 0.1)
+	y = 0;
+	while (y < 200)
 	{
-		y = 0;
-		while (y < HEIGHT * 0.1)
+		x = 0;
+		while (x < 200)
 		{
-			if (mlx->pars->map[(int)((start_y + y) / TILE_SIZE)][(int)((start_x + x) / TILE_SIZE)] == '1')
-				draw_square(mlx, x, y, WALL_COLOR);
-			y++;
-		}
-		x++;
-	}
+    		int map_x = (map_start_x + x) / TILE_SIZE;
+    		int map_y = (map_start_y + y) / TILE_SIZE;
 	
+    		if (map_x >= 0 && map_x < mlx->vars->map_w &&
+    		    map_y >= 0 && map_y < mlx->vars->map_h)
+    		{
+    		    char cell = mlx->pars->map[map_y][map_x];
+    		    if (cell == '1')
+    		        draw_square(mlx, x, y, WALL_COLOR);
+    		}
+			x++;
+		}
+		y++;
+	}
 }
 
-void	minimap(t_mlx *mlx)
+void minimap(t_mlx *mlx)
 {
-	(void)mlx;
-	draw_minimap(mlx);
-	draw_player(mlx, mlx->player->center_x  * 0.1, mlx->player->center_y * 0.1);
+    draw_minimap(mlx);
+    draw_player(mlx, 100, 100); // Draw the player at the center of the minimap
 }
 
-int	magic(t_mlx *mlx)
+int magic(t_mlx *mlx)
 {
-	mlx_clear_window(mlx->mlx, mlx->win);
-	handle_events(mlx);
-	castrays(mlx);
-	minimap(mlx);
-	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
-	return (0);
+    mlx_clear_window(mlx->mlx, mlx->win);
+    handle_events(mlx);
+    castrays(mlx);
+    minimap(mlx);
+    mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
+    return (0);
 }
 
 t_data	*get_texture(t_mlx *mlx, int id)

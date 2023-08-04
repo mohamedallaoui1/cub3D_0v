@@ -30,6 +30,9 @@ void	handle_events(t_mlx *mlx)
 	if (mlx->player->keys.key_left || mlx->mouse.which_side == -1)
 		mlx->player->player_angle
 			= normalize_angle(mlx->player->player_angle  - rotate * percent);
+	if (mlx->player->keys.key_space)
+		;
+		// check the line of the player if its in the door cell and change it to 0 (bye transport gha ymchi)
 	else if (mlx->player->keys.key_right ||  mlx->mouse.which_side)
 		mlx->player->player_angle
 			= normalize_angle(mlx->player->player_angle + rotate * percent);
@@ -59,6 +62,7 @@ void	wsa(t_mlx *mlx, int keycode)
 
 int	control_key(int keycode, t_mlx *mlx)
 {
+	printf ("%d\n", keycode);
 	wsa(mlx, keycode);
 	if (keycode == KEY_D)
 	{
@@ -70,6 +74,8 @@ int	control_key(int keycode, t_mlx *mlx)
 		mlx->player->keys.key_left = 1;
 	if (keycode == KEY_RIGHT)
 		mlx->player->keys.key_right = 1;
+	if (keycode == SPACE_KEY)
+		mlx->player->keys.key_space = 1;
 	(keycode == 53) && (exit(0), 0);
 	return (0);
 }

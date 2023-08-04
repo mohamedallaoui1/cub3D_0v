@@ -70,6 +70,8 @@ void draw_minimap(t_mlx *mlx)
     		{
     		    if (mlx->pars->map[(int)((map_start_y + y) / TILE_SIZE)][(int)((map_start_x + x) / TILE_SIZE)] == '1')
     		        draw_square(mlx, x, y, WALL_COLOR);
+				else if (mlx->pars->map[(int)((map_start_y + y) / TILE_SIZE)][(int)((map_start_x + x) / TILE_SIZE)] == '2')
+    		        draw_square(mlx, x, y, DOOR_COLOR);
 				else
     		        draw_square(mlx, x, y, GROUND_COLOR);
     		}

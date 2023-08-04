@@ -51,8 +51,8 @@ void	get_ver(t_mlx *mlx, int id)
 	while (intercept.x >= 0 && intercept.x < mlx->width && \
 	intercept.y >= 0 && intercept.y < mlx->height)
 	{
-		if (mlx->pars->map[(int)(intercept.y / TILE_SIZE)][(int)((intercept.x - \
-		0.001 * mlx->player->rays[id].facing_left) / TILE_SIZE)] == '1')
+		if (is_collusion(mlx, (int)(intercept.y / TILE_SIZE), (int)((intercept.x - \
+		0.001 * mlx->player->rays[id].facing_left) / TILE_SIZE)))
 		{
 			mlx->player->rays[id].vert_hit_x = intercept.x;
 			mlx->player->rays[id].vert_hit_y = intercept.y;
@@ -62,6 +62,13 @@ void	get_ver(t_mlx *mlx, int id)
 		intercept.x += delta.x;
 		intercept.y += delta.y;
 	}
+}
+
+int	is_collusion(t_mlx *mlx, int i, int j)
+{
+	if (mlx->pars->map[i][j] == '1' || mlx->pars->map[i][j] == '2')
+		return (1);
+	return (0);
 }
 
 void	get_hor(t_mlx *mlx, int id)
@@ -79,9 +86,9 @@ void	get_hor(t_mlx *mlx, int id)
 	while (intercept.x >= 0 && intercept.x < mlx->width && intercept.y >= \
 	0 && intercept.y < mlx->height)
 	{
-		if (mlx->pars->map[(int)((intercept.y - 0.001 * \
-		mlx->player->rays[id].facing_up) / TILE_SIZE)][(int)((intercept.x) / \
-		TILE_SIZE)] == '1')
+		if (is_collusion(mlx, (int)((intercept.y - 0.001 * \
+		mlx->player->rays[id].facing_up) \
+		/ TILE_SIZE), (int)((intercept.x) / TILE_SIZE)))
 		{
 			mlx->player->rays[id].hor_hit_x = intercept.x;
 			mlx->player->rays[id].hor_hit_y = intercept.y;

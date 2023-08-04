@@ -42,10 +42,19 @@
 # define KEY_D 2 
 # define KEY_LEFT 123 
 # define KEY_RIGHT 124
+# define SPACE_KEY 49
 # define PLAYER_SIZE 5
 # define MAP_SIZE 200
 # define HALF_WIN 100 // for safe area for the mouse
 # define MAP_INCR 3
+# define DOOR_COLOR 0xffffff
+
+typedef struct s_door
+{
+	int	x;
+	int	y;
+	int	status;
+}				t_door;
 
 typedef struct s_pars
 {
@@ -113,6 +122,7 @@ typedef struct s_keys
 	int	key_d;
 	int	key_left;
 	int	key_right;
+	int	key_space;
 }		t_keys;
 
 typedef struct s_player
@@ -150,6 +160,7 @@ typedef struct s_mlx
 	t_vars		*vars;
 	t_player	*player;
 	t_mouse		mouse;
+	t_door		*door;
 }		t_mlx;
 
 void			texture_parsing(t_pars *pars, char **file);
@@ -196,4 +207,5 @@ void			validate_map(char **map);
 int				mouse_control(int x, int y, t_mlx *mlx);
 unsigned int	reverse_color(unsigned int color);
 void			draw_line(t_mlx *mlx, t_point point1, t_point point2);
+int				is_collusion(t_mlx *mlx, int i, int j);
 #endif

@@ -36,7 +36,7 @@ int	check_char(char **file, int i, int j)
 		file[i][j + 1] == ' ' || file[i][j + 1] == '\0'
 		|| file[i][j + 1] == 'N' ||
 		file[i][j + 1] == 'S' || file[i][j + 1] == 'W'
-		|| file[i][j + 1] == 'E'))
+		|| file[i][j + 1] == 'E' || file[i][j + 1] == '2' || file[i][j + 1] == 'c'))
 		return (1);
 	return (0);
 }

@@ -27,6 +27,48 @@ void	keys_init(t_mlx *mlx)
 	mlx->mouse.which_side = 0;
 }
 
+int	count_doors(t_mlx *mlx)
+{
+	int	x;
+	int	y;
+	int	count;
+
+	y = -1;
+	count = 0;
+	while (mlx->pars->map[++y])
+	{
+		x = -1;
+		while (mlx->pars->map[y][++x])
+			if (mlx->pars->map[y][x] == '2')
+				count++;
+	}
+	return (count);
+}
+
+void	init_doors(t_mlx *mlx)
+{
+	int	x;
+	int	y;
+	int	i;
+	int	status;
+
+	y = -1;
+	i = 0;
+	status = 0;
+	while (mlx->pars->map[++y])
+	{
+		x = -1;
+		while (mlx->pars->map[y][++x])
+		{
+			if (mlx->pars->map[y][x] == '2')
+			{
+				status = 1;
+				mlx->door[i++] = (t_door){x, y, status};
+			}
+		}
+	}
+}
+
 t_mlx	*init(double *arr, int ac, char *av[])
 {
 	t_mlx	*mlx;
@@ -36,12 +78,14 @@ t_mlx	*init(double *arr, int ac, char *av[])
 	mlx->vars = malloc(sizeof(t_vars));
 	mlx->player = malloc(sizeof(t_player));
 	(parsing(mlx->pars, ac, av), map_w_h(mlx->vars, mlx->pars));
+	mlx->door = malloc(sizeof(t_door) * count_doors(mlx));
 	arr = player_pos(mlx->pars->map);
 	mlx->player->pos.y = arr[0] * TILE_SIZE;
 	mlx->player->pos.x = arr[1] * TILE_SIZE;
 	(free(arr), set_player_dir(mlx), player_angle(mlx));
 	mlx->height = mlx->vars->map_h * TILE_SIZE;
 	mlx->width = mlx->vars->map_w * TILE_SIZE;
+	init_doors(mlx);
 	mlx->mlx = mlx_init();
 	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "cub3D");
 	mlx->img.img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);

@@ -20,7 +20,11 @@ int	up_down_condition(t_mlx *mlx, t_point *old)
 	if (mlx->pars->map[(int)((mlx->player->center_y
 				+ LIMIT * sin(mlx->player->player_angle)
 				* mlx->player->dir_forw) / TILE_SIZE)]
-			[(int)((old->x + TILE_SIZE / 2) / TILE_SIZE)] == '1')
+			[(int)((old->x + TILE_SIZE / 2) / TILE_SIZE)] == '1' || \
+			mlx->pars->map[(int)((mlx->player->center_y
+				+ LIMIT * sin(mlx->player->player_angle)
+				* mlx->player->dir_forw) / TILE_SIZE)]
+			[(int)((old->x + TILE_SIZE / 2) / TILE_SIZE)] == '2')
 	{
 		mlx->player->pos.y = old->y;
 		x_y.y = 1;
@@ -28,15 +32,22 @@ int	up_down_condition(t_mlx *mlx, t_point *old)
 	if (mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / TILE_SIZE)]
 		[(int)((mlx->player->center_x + LIMIT
 			* cos(mlx->player->player_angle)
-			* mlx->player->dir_forw) / TILE_SIZE)] == '1')
+			* mlx->player->dir_forw) / TILE_SIZE)] == '1' || \
+		mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / TILE_SIZE)]
+		[(int)((mlx->player->center_x + LIMIT
+			* cos(mlx->player->player_angle)
+			* mlx->player->dir_forw) / TILE_SIZE)] == '2')
 	{
 		mlx->player->pos.x = old->x;
 		x_y.x = 1;
 	}
-	if (mlx->pars->map[(int)((mlx->player->center_y + LIMIT \
+	if ((mlx->pars->map[(int)((mlx->player->center_y + LIMIT \
 	* sin(mlx->player->player_angle) * mlx->player->dir_forw) / TILE_SIZE)]
 	[(int)((mlx->player->center_x + LIMIT * cos(mlx->player->player_angle)
-	* mlx->player->dir_forw) / TILE_SIZE)] == '1' && !x_y.x && !x_y.y)
+	* mlx->player->dir_forw) / TILE_SIZE)] == '1' || mlx->pars->map[(int)((mlx->player->center_y + LIMIT \
+	* sin(mlx->player->player_angle) * mlx->player->dir_forw) / TILE_SIZE)]
+	[(int)((mlx->player->center_x + LIMIT * cos(mlx->player->player_angle)
+	* mlx->player->dir_forw) / TILE_SIZE)] == '2') && !x_y.x && !x_y.y)
 		mlx->player->pos = *old;
 	return (0);
 }

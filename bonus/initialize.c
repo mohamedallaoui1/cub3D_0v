@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 12:55:20 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/03 20:52:17 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/04 18:30:52 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ void	texture_init(t_mlx *mlx)
 				strs[i], &mlx->textures[i].img_width,
 				&mlx->textures[i].img_height);
 		if (!mlx->textures[i].img)
-			(write(1, "Error\nImage Does not exist!", 28), exit(i));
+			(printf("Error\nImage Does not exist!"), exit(i));
 		mlx->textures[i].addr = mlx_get_data_addr(mlx->textures[i].img,
 				&mlx->textures[i].bits_per_pixel,
 				&mlx->textures[i].line_length, &mlx->textures[i].endian);
 		if (!mlx->textures[i].addr)
-			(write(1, "Error\nImage Problem!", 28), exit(i));
+			(printf("Error\nImage Problem!"), exit(i));
 		printf("xpm file (%s) : loaded!\n", strs[i]);
 	}
 	printf("DONE loading textures!\n");

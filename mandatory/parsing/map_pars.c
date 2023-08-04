@@ -87,9 +87,9 @@ int	is_player(char c)
 
 void	check_around(char **map, int i, int j)
 {
-	if ((i > 0 && j > 0) && (map[i][j + 1] == ' ' || \
-	map[i][j + 1] == '\0') && \
-	(map[i + 1][j] == ' ' || map[i + 1][j] == '\0') && \
-	(map[i][j - 1] == ' ' || map[i][j - 1] == '\0'))
+	if ((i <= 0 || j <= 0) || ((i > 0 && j > 0) && \
+	((map[i][j + 1] == ' ' || map[i][j + 1] == '\0') || \
+	(!map[i + 1] || map[i + 1][j] == ' ' || map[i + 1][j] == '\0') || \
+	(!map[i - 1] || map[i - 1][j] == ' ' || map[i - 1][j] == '\0'))))
 		error("Error\nWrong map format\n");
 }

@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/03 17:05:29 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/04 10:11:15 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define PLAYER_COLOR 0xff0000
 # define WALL_COLOR 0x943a5b
 # define SPACE_COLOR 0x000000
-# define GROUND_COLOR 0xC3CB6E
+# define GROUND_COLOR 0x222527
 # define WIDTH 1000
 # define HEIGHT 700
 # define RIGHT -1
@@ -195,4 +195,5 @@ void			check_double(char **map);
 void			validate_map(char **map);
 int				mouse_control(int x, int y, t_mlx *mlx);
 unsigned int	reverse_color(unsigned int color);
+void			draw_line(t_mlx *mlx, t_point point1, t_point point2);
 #endif

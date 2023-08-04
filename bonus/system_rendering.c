@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 10:47:59 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/03 22:49:07 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/04 10:18:55 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,38 +52,38 @@ void draw_minimap(t_mlx *mlx)
 {
 	int	x;
 	int	y;
-    int player_x = mlx->player->center_x;
-    int player_y = mlx->player->center_y;
-    int map_start_x = player_x - 100;
-    int map_start_y = player_y - 100;
+    int map_start_x;
+    int map_start_y;
 
-	x = 0;
-	y = 0;
-	while (y < 200)
+	y = -1;
+    map_start_y = mlx->player->center_y - MAP_SIZE / 2;
+	map_start_x = mlx->player->center_x - MAP_SIZE / 2;
+	while (++y < MAP_SIZE)
 	{
-		x = 0;
-		while (x < 200)
+		x = -1;
+		while (++x < MAP_SIZE)
 		{
-    		int map_x = (map_start_x + x) / TILE_SIZE;
-    		int map_y = (map_start_y + y) / TILE_SIZE;
-	
-    		if (map_x >= 0 && map_x < mlx->vars->map_w &&
-    		    map_y >= 0 && map_y < mlx->vars->map_h)
+    		if ((int)((map_start_x + x) / TILE_SIZE) >= 0
+				&& (int)((map_start_x + x) / TILE_SIZE) < mlx->vars->map_w &&
+    		    (int)((map_start_y + y) / TILE_SIZE) >= 0
+				&& (int)(((map_start_y + y) / TILE_SIZE)) < mlx->vars->map_h)
     		{
-    		    char cell = mlx->pars->map[map_y][map_x];
-    		    if (cell == '1')
+    		    if (mlx->pars->map[(int)((map_start_y + y) / TILE_SIZE)][(int)((map_start_x + x) / TILE_SIZE)] == '1')
     		        draw_square(mlx, x, y, WALL_COLOR);
+				else
+    		        draw_square(mlx, x, y, GROUND_COLOR);
     		}
-			x++;
 		}
-		y++;
 	}
 }
 
 void minimap(t_mlx *mlx)
 {
     draw_minimap(mlx);
-    draw_player(mlx, 100, 100); // Draw the player at the center of the minimap
+    draw_player(mlx, MAP_SIZE / 2, MAP_SIZE / 2);
+	draw_line(mlx, (t_point){(MAP_SIZE / 2) + 2, (MAP_SIZE / 2) + 2},
+		(t_point){(MAP_SIZE / 2) + 2 + (MAP_SIZE / 10) * cos(mlx->player->player_angle),
+		(MAP_SIZE / 2) + 2 + (MAP_SIZE / 10) * sin(mlx->player->player_angle)});
 }
 
 int magic(t_mlx *mlx)

@@ -89,6 +89,13 @@ void	texture_parsing(t_pars *pars, char **file)
 	}
 }
 
+void	check_player_around(char **map, int i, int j)
+{
+	if ((i <= 0 || j <= 0) || ((i > 0 && j > 0) && (map[i][j + 1] == '\0' || !map[i + 1] ||\
+	map[i + 1][j] == '\0' || !map[i - 1] || map[i - 1][j] == '\0')))
+		error("Error\nWrong map format\n");
+}
+
 void	validate_map(char **map)
 {
 	int	i;
@@ -112,6 +119,8 @@ void	validate_map(char **map)
 			}
 			if (map[i][j] == '0')
 				check_around(map, i, j);
+			if (map[i][j] == 'N' | map[i][j] == 'W' | map[i][j] == 'S' | map[i][j] == 'E')
+				check_player_around(map, i, j);
 			j++;
 		}
 		i++;

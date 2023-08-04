@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 10:39:28 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 12:39:40 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/04 16:18:59 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,19 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-unsigned int	shading(int color, double dist)
+unsigned int	shading(int color, double percent)
 {
-	unsigned int	red;
-	unsigned int	alpha;
-	unsigned int	green;
-	unsigned int	blue;
+	unsigned char	red;
+	unsigned char	alpha;
+	unsigned char	green;
+	unsigned char	blue;
 
-	red = (color >> 16) & 0xFF;
-	alpha = (color >> 24) & 0xFF;
-	green = (color >> 8) & 0xFF;
-	blue = color & 0xFF;
-	if (dist > 1)
-		dist = 1;
-	alpha = (unsigned int)(255 * dist);
+	red = (color >> 16);
+	alpha = (color >> 24);
+	green = (color >> 8);
+	blue = color;
+	if (percent > 1)
+		percent = 1;
+	alpha = (unsigned int)(255 * percent);
 	return (alpha << 24 | red << 16 | green << 8 | blue);
 }

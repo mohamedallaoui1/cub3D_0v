@@ -1,5 +1,5 @@
-NO ./textures/tt1.xpm
-SO ./textures/tt2.xpm
+NO ./textures/metal_brick.xpm
+SO ./textures/wood_wall.xpm
 WE ./textures/tt3.xpm
 EA ./textures/tt4.xpm
 

@@ -6,7 +6,7 @@
 /*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:15:18 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/05 23:01:55 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/06 13:53:41 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,16 @@ int	mouse_control(int x, int y, t_mlx *mlx)
 	return (0);
 }
 
+
+int	animation_control(int button, int x, int y, t_mlx *mlx)
+{
+	(void)x;
+	(void)y;
+	if (button == 1)
+		mlx->start = 1;
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
 	t_mlx		*mlx;
@@ -73,6 +83,8 @@ int	main(int ac, char **av)
 
 	arr = NULL;
 	mlx = init(arr, ac, av);
+	mlx->start = 0;
+	mlx->animation_frame = 0;
 	mlx->player->rays = malloc(WIDTH * sizeof(t_rays));
 	mlx_hook(mlx->win, 17, 0L, close_window, mlx);
 	mlx_hook(mlx->win, 6, 0L, mouse_control, mlx);
@@ -80,6 +92,7 @@ int	main(int ac, char **av)
 	mlx_hook(mlx->win, 3, 1L << 2, key_released, mlx);
 	mlx_hook(mlx->win, 6, 1L << 2, mouse_control, mlx);
 	mlx_loop_hook(mlx->mlx, magic, mlx);
+	mlx_mouse_hook(mlx->win, animation_control, mlx);
 	mlx_loop(mlx->mlx);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Controls.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:22:23 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/04 16:50:51 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/06 13:39:38 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ int	control_key(int keycode, t_mlx *mlx)
 		mlx->player->keys.key_right = 1;
 	if (keycode == SPACE_KEY)
 		mlx->player->keys.key_space = 1;
-	(keycode == 53) && (exit(0), 0);
+	if (keycode == 53)
+		exit(0);
 	return (0);
 }
 

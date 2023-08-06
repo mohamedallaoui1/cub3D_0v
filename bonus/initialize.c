@@ -6,7 +6,7 @@
 /*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 12:55:20 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/06 13:32:17 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/06 13:56:08 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_mlx	*init(double *arr, int ac, char *av[])
 	mlx->img.img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
 	mlx->img.addr = mlx_get_data_addr(mlx->img.img, &mlx->img.bits_per_pixel,
 			&mlx->img.line_length, &mlx->img.endian);
+	init_sprites(mlx);
 	texture_init(mlx);
 	keys_init(mlx);
 	return (mlx);
@@ -43,9 +44,9 @@ void	texture_init(t_mlx *mlx)
 	char	**strs;
 
 	i = -1;
-	strs = (char *[4]){mlx->pars->no, mlx->pars->so,
-		mlx->pars->ea, mlx->pars->we};
-	while (++i < 4)
+	strs = (char *[5]){mlx->pars->no, mlx->pars->so,
+		mlx->pars->ea, mlx->pars->we, "./textures/door.xpm"};
+	while (++i < 5)
 	{
 		printf("xpm file (%s) : loading...\n", strs[i]);
 		mlx->textures[i].img = mlx_xpm_file_to_image(mlx->mlx,

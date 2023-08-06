@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 19:19:00 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/31 18:16:11 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/06 10:37:58 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	check_map(char **map)
 		{
 			if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != ' ' && \
 			map[i][j] != 'N' && map[i][j] != 'S' && \
-			map[i][j] != 'E' && map[i][j] != 'W' && map[i][j] != 'c' && \
+			map[i][j] != 'E' && map[i][j] != 'W' && \
 			map[i][j] != '2')
 				error("Error\nWrong map format\n");
 			j++;

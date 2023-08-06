@@ -6,7 +6,7 @@
 /*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 15:44:00 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/05 23:08:06 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/06 14:05:42 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	left_right_condition(t_mlx *mlx, t_point *old)
 	i_j.y = ((mlx->player->center_y - LIMIT * cos(mlx->player->player_angle) * \
 	mlx->player->dir_side) / TILE_SIZE);
 	i_j.x = ((old->x + TILE_SIZE / 2) / TILE_SIZE);
-	if (mlx->pars->map[(int)i_j.y][(int)i_j.x] == '1')
+	if (mlx->pars->map[(int)i_j.y][(int)i_j.x] == '1' || \
+	mlx->pars->map[(int)i_j.y][(int)i_j.x] == '2')
 	{
 		mlx->player->pos.y = old->y;
 		x_y.y = 1;
@@ -60,13 +61,15 @@ int	left_right_condition(t_mlx *mlx, t_point *old)
 	if (mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / \
 	TILE_SIZE)][(int)((mlx->player->center_x + LIMIT * \
 	sin(mlx->player->player_angle) * mlx->player->dir_side) \
-	/ TILE_SIZE)] == '1')
+	/ TILE_SIZE)] == '1' || mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / \
+	TILE_SIZE)][(int)((mlx->player->center_x + LIMIT * \
+	sin(mlx->player->player_angle) * mlx->player->dir_side) \
+	/ TILE_SIZE)] == '2')
 	{
 		mlx->player->pos.x = old->x;
 		x_y.x = 1;
 	}
-	check_and_slide(mlx, x_y, old);
-	return (0);
+	return (check_and_slide(mlx, x_y, old), 0);
 }
 
 int	up_down(t_mlx *mlx)

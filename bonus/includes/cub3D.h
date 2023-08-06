@@ -6,7 +6,7 @@
 /*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/05 23:24:47 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/06 13:56:17 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@
 # define HALF_WIN 100 // for safe area for the mouse
 # define MAP_INCR 3
 # define DOOR_COLOR 0xffffff
+# define FRAME_NUM 42
 
 typedef struct s_door
 {
@@ -155,14 +156,8 @@ typedef struct s_sprite
 	char	*sprite_path;
 	int		width;
 	int		height;
+	t_data	sprite;
 }		t_sprite;
-
-typedef struct s_splist
-{
-	struct s_splist	*next;
-	struct s_sprite	data;
-	t_data			img;
-}		t_splite;
 
 typedef struct s_mlx
 {
@@ -171,11 +166,13 @@ typedef struct s_mlx
 	int			width;
 	int			height;
 	t_data		img;
-	t_data		textures[4];
+	t_data		textures[5];
 	t_pars		*pars;
 	t_vars		*vars;
 	t_player	*player;
-	t_splite	sprite_list;
+	t_sprite	sprites[FRAME_NUM];
+	int			start;
+	int			animation_frame;
 	t_mouse		mouse;
 	t_door		*door;
 }		t_mlx;
@@ -228,4 +225,7 @@ int				is_collusion(t_mlx *mlx, int i, int j);
 void			up_down_condition_norm(t_mlx *mlx, t_point *old, t_point x_y);
 void			keys_init(t_mlx *mlx);
 void			draw_minimap(t_mlx *mlx);
+void			init_sprites(t_mlx *mlx);
+void			draw_gun(t_mlx *mlx);
+void		    init_sprites(t_mlx *mlx);
 #endif

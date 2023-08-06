@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:22:23 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/04 16:50:51 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/06 11:40:30 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ void	handle_events(t_mlx *mlx)
 		(mlx->mouse.which_side == -1 && !mlx->player->keys.key_right))
 		mlx->player->player_angle
 			= normalize_angle(mlx->player->player_angle  - rotate * percent);
-	if (mlx->player->keys.key_space)
-		;
-		// check the line of the player if its in the door cell and change it to 0 (bye transport gha ymchi)
-	else if (mlx->player->keys.key_right ||  mlx->mouse.which_side)
+	else if (mlx->player->keys.key_right ||  mlx->mouse.which_side == 1)
 		mlx->player->player_angle
 			= normalize_angle(mlx->player->player_angle + rotate * percent);
+	// check the line of the player if its in the door cell and change it to 0 (bye transport gha ymchi)
+	if (mlx->player->keys.key_space)
+		;
 }
 
 void	wsa(t_mlx *mlx, int keycode)
@@ -63,7 +63,6 @@ void	wsa(t_mlx *mlx, int keycode)
 
 int	control_key(int keycode, t_mlx *mlx)
 {
-	printf ("%d\n", keycode);
 	wsa(mlx, keycode);
 	if (keycode == KEY_D)
 	{
@@ -77,7 +76,8 @@ int	control_key(int keycode, t_mlx *mlx)
 		mlx->player->keys.key_right = 1;
 	if (keycode == SPACE_KEY)
 		mlx->player->keys.key_space = 1;
-	(keycode == 53) && (exit(0), 0);
+	if (keycode == 53)
+		exit(0);
 	return (0);
 }
 

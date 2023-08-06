@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:08:39 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/04 22:17:27 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/06 11:28:26 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,19 @@ void	castrays(t_mlx *mlx)
 	}
 }
 
-void	save_rest(t_mlx *mlx, int id, t_point intercept)
+void	draw_gun(t_mlx *mlx)
 {
-	t_sprite	*sprite;
+	int	id;
+	int	w;
+	int	h;
 
-	if (mlx->pars->map[(int)(intercept.y / TILE_SIZE)][(int)((intercept.x - \
-		0.001 * mlx->player->rays[id].facing_left) / TILE_SIZE)] == 'c')
-	{
-		sprite = malloc(sizeof(t_sprite));
-		sprite->x = intercept.x + TILE_SIZE / 2;
-		sprite->y = intercept.y + TILE_SIZE / 2;
-		add_listfront(mlx, sprite);
-	}
+	id = mlx->animation_frame;
+	w = WIDTH - mlx->sprites[id % 42].sprite.img_width;
+	h = HEIGHT - mlx->sprites[id % 42].sprite.img_height;
+	if (w <= 0 || h <= 0)
+		(printf("the WIDTH or HEIGHT are smaller than possible recomanded (1000/700)\n"), exit(2));
+	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->sprites[id % 42].sprite.img,
+		WIDTH - mlx->sprites[id % 42].sprite.img_width, h);
 }
 
 void	get_ver(t_mlx *mlx, int id)
@@ -73,8 +74,6 @@ void	get_ver(t_mlx *mlx, int id)
 			mlx->player->rays[id].found_vert = 1;
 			return ;
 		}
-		// else
-		// 	save_rest()
 		intercept.x += delta.x;
 		intercept.y += delta.y;
 	}

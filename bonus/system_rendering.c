@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 10:47:59 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/04 10:18:55 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/06 11:21:20 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	draw_player(t_mlx *mlx, int i, int j)
 		x++;
 	}
 }
+
 void	draw_square(t_mlx *mlx, int x, int y, int color)
 {
 	int	i;
@@ -48,6 +49,7 @@ void	draw_square(t_mlx *mlx, int x, int y, int color)
 		i++;
 	}
 }
+
 void draw_minimap(t_mlx *mlx)
 {
 	int	x;
@@ -95,6 +97,16 @@ int magic(t_mlx *mlx)
     castrays(mlx);
     minimap(mlx);
     mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
+	if (mlx->start == 1)
+	{
+		mlx->animation_frame++;
+		if (mlx->animation_frame == 42)
+		{
+			mlx->start = 0;
+			mlx->animation_frame = 0;
+		}
+	}
+	draw_gun(mlx);
     return (0);
 }
 

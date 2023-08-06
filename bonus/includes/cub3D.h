@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/04 22:03:11 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/06 11:02:30 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,14 +155,8 @@ typedef struct s_sprite
 	char	*sprite_path;
 	int		width;
 	int		height;
+	t_data	sprite;
 }		t_sprite;
-
-typedef struct s_splist
-{
-	struct s_splist	*next;
-	struct s_sprite	data;
-	t_data			img;
-}		t_splite;
 
 typedef struct s_mlx
 {
@@ -175,7 +169,9 @@ typedef struct s_mlx
 	t_pars		*pars;
 	t_vars		*vars;
 	t_player	*player;
-	t_splite		sprite_list;
+	t_sprite	sprites[42];
+	int			start;
+	int			animation_frame;
 	t_mouse		mouse;
 	t_door		*door;
 }		t_mlx;
@@ -224,9 +220,7 @@ void			validate_map(char **map);
 int				mouse_control(int x, int y, t_mlx *mlx);
 unsigned int	reverse_color(unsigned int color);
 void			draw_line(t_mlx *mlx, t_point point1, t_point point2);
-<<<<<<< HEAD
 int				is_collusion(t_mlx *mlx, int i, int j);
-=======
-void			add_listfront(t_mlx *mlx, t_sprite *new);
->>>>>>> c2a2934193611541623f66d11f8b11ab3653c097
+void			init_sprites(t_mlx *mlx);
+void			draw_gun(t_mlx *mlx);
 #endif

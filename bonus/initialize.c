@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 12:55:20 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/04 18:30:52 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/06 11:30:00 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ t_mlx	*init(double *arr, int ac, char *av[])
 	mlx->img.img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
 	mlx->img.addr = mlx_get_data_addr(mlx->img.img, &mlx->img.bits_per_pixel,
 			&mlx->img.line_length, &mlx->img.endian);
+	init_sprites(mlx);
 	texture_init(mlx);
 	keys_init(mlx);
 	return (mlx);

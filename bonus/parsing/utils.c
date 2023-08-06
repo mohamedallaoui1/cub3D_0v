@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 10:32:53 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 18:37:20 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/05 23:21:20 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ int	check_char(char **file, int i, int j)
 	if (file[i][j] == 'C' && file[i][j + 1] == ' ')
 		return (1);
 	if (file[i][j] == '1' && (file[i][j + 1] == '1' || file[i][j + 1] == '0' ||
-		file[i][j + 1] == ' ' || file[i][j + 1] == '\0'
-		|| file[i][j + 1] == 'N' ||
-		file[i][j + 1] == 'S' || file[i][j + 1] == 'W'
-		|| file[i][j + 1] == 'E' || file[i][j + 1] == '2' || file[i][j + 1] == 'c'))
+	file[i][j + 1] == ' ' || file[i][j + 1] == '\0' \
+	|| file[i][j + 1] == 'N' || \
+	file[i][j + 1] == 'S' || file[i][j + 1] == 'W' \
+	|| file[i][j + 1] == 'E' || file[i][j + 1] == '2' || \
+	file[i][j + 1] == 'c'))
 		return (1);
 	return (0);
 }

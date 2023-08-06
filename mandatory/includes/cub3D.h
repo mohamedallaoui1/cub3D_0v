@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/01 15:11:21 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/06 13:35:39 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,6 @@ int				check_char(char **file, int i, int j);
 void			check_around(char **map, int i, int j);
 char			**get_map(char **file);
 void			check_map(char **map);
-void			check_double(char **map);
 void			validate_map(char **map);
+void			check_double(char **map);
 #endif

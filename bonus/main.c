@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:15:18 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/04 21:04:31 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/05 23:01:55 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ int	mouse_control(int x, int y, t_mlx *mlx)
 		mlx->mouse.which_side = -1;
 	else
 		mlx->mouse.which_side = 1;
-	if ((x < 0 || x > WIDTH || (x >= WIDTH / 2 - SAFE_AREA
-			&& x <= WIDTH / 2 + SAFE_AREA) || y < 0 || y > HEIGHT))
+	if ((x < 0 || x > WIDTH || (x >= WIDTH / 2 - SAFE_AREA \
+	&& x <= WIDTH / 2 + SAFE_AREA) || y < 0 || y > HEIGHT))
 		mlx->mouse.which_side = 0;
 	return (0);
 }

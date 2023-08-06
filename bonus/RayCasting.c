@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RayCasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:08:39 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/04 22:17:27 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/05 23:09:44 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,6 @@ void	castrays(t_mlx *mlx)
 	}
 }
 
-void	save_rest(t_mlx *mlx, int id, t_point intercept)
-{
-	t_sprite	*sprite;
-
-	if (mlx->pars->map[(int)(intercept.y / TILE_SIZE)][(int)((intercept.x - \
-		0.001 * mlx->player->rays[id].facing_left) / TILE_SIZE)] == 'c')
-	{
-		sprite = malloc(sizeof(t_sprite));
-		sprite->x = intercept.x + TILE_SIZE / 2;
-		sprite->y = intercept.y + TILE_SIZE / 2;
-		add_listfront(mlx, sprite);
-	}
-}
-
 void	get_ver(t_mlx *mlx, int id)
 {
 	t_point	intercept;
@@ -65,7 +51,8 @@ void	get_ver(t_mlx *mlx, int id)
 	while (intercept.x >= 0 && intercept.x < mlx->width && \
 	intercept.y >= 0 && intercept.y < mlx->height)
 	{
-		if (is_collusion(mlx, (int)(intercept.y / TILE_SIZE), (int)((intercept.x - \
+		if (is_collusion(mlx, (int)(intercept.y / \
+		TILE_SIZE), (int)((intercept.x - \
 		0.001 * mlx->player->rays[id].facing_left) / TILE_SIZE)))
 		{
 			mlx->player->rays[id].vert_hit_x = intercept.x;
@@ -73,8 +60,6 @@ void	get_ver(t_mlx *mlx, int id)
 			mlx->player->rays[id].found_vert = 1;
 			return ;
 		}
-		// else
-		// 	save_rest()
 		intercept.x += delta.x;
 		intercept.y += delta.y;
 	}

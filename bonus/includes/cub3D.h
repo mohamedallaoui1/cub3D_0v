@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/04 22:03:11 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/05 23:24:47 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ typedef struct s_mlx
 	t_pars		*pars;
 	t_vars		*vars;
 	t_player	*player;
-	t_splite		sprite_list;
+	t_splite	sprite_list;
 	t_mouse		mouse;
 	t_door		*door;
 }		t_mlx;
@@ -224,9 +224,8 @@ void			validate_map(char **map);
 int				mouse_control(int x, int y, t_mlx *mlx);
 unsigned int	reverse_color(unsigned int color);
 void			draw_line(t_mlx *mlx, t_point point1, t_point point2);
-<<<<<<< HEAD
 int				is_collusion(t_mlx *mlx, int i, int j);
-=======
-void			add_listfront(t_mlx *mlx, t_sprite *new);
->>>>>>> c2a2934193611541623f66d11f8b11ab3653c097
+void			up_down_condition_norm(t_mlx *mlx, t_point *old, t_point x_y);
+void			keys_init(t_mlx *mlx);
+void			draw_minimap(t_mlx *mlx);
 #endif

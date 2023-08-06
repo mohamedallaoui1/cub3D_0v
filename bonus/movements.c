@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movements.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 15:44:00 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 13:35:09 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/05 23:08:06 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,26 +29,7 @@ int	up_down_condition(t_mlx *mlx, t_point *old)
 		mlx->player->pos.y = old->y;
 		x_y.y = 1;
 	}
-	if (mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / TILE_SIZE)]
-		[(int)((mlx->player->center_x + LIMIT
-			* cos(mlx->player->player_angle)
-			* mlx->player->dir_forw) / TILE_SIZE)] == '1' || \
-		mlx->pars->map[(int)((old->y + TILE_SIZE / 2) / TILE_SIZE)]
-		[(int)((mlx->player->center_x + LIMIT
-			* cos(mlx->player->player_angle)
-			* mlx->player->dir_forw) / TILE_SIZE)] == '2')
-	{
-		mlx->player->pos.x = old->x;
-		x_y.x = 1;
-	}
-	if ((mlx->pars->map[(int)((mlx->player->center_y + LIMIT \
-	* sin(mlx->player->player_angle) * mlx->player->dir_forw) / TILE_SIZE)]
-	[(int)((mlx->player->center_x + LIMIT * cos(mlx->player->player_angle)
-	* mlx->player->dir_forw) / TILE_SIZE)] == '1' || mlx->pars->map[(int)((mlx->player->center_y + LIMIT \
-	* sin(mlx->player->player_angle) * mlx->player->dir_forw) / TILE_SIZE)]
-	[(int)((mlx->player->center_x + LIMIT * cos(mlx->player->player_angle)
-	* mlx->player->dir_forw) / TILE_SIZE)] == '2') && !x_y.x && !x_y.y)
-		mlx->player->pos = *old;
+	up_down_condition_norm(mlx, old, x_y);
 	return (0);
 }
 

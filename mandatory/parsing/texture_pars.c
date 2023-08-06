@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_pars.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 17:28:15 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/31 11:37:40 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/06 13:34:22 by mallaoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ void	texture_parsing(t_pars *pars, char **file)
 
 void	check_player_around(char **map, int i, int j)
 {
-	if ((i <= 0 || j <= 0) || ((i > 0 && j > 0) && (map[i][j + 1] == '\0' || !map[i + 1] ||\
+	if ((i <= 0 || j <= 0) || ((i > 0 && j > 0) && \
+	(map[i][j + 1] == '\0' || !map[i + 1] || \
 	map[i + 1][j] == '\0' || !map[i - 1] || map[i - 1][j] == '\0')))
 		error("Error\nWrong map format\n");
 }
@@ -101,14 +102,13 @@ void	validate_map(char **map)
 	int	i;
 	int	j;
 
-	i = 0;
-	while (map[i])
+	i = -1;
+	while (map[++i])
 	{
-		j = 0;
-		while (map[i][j])
+		j = -1;
+		while (map[i][++j])
 		{
 			if (map[i][j] == ' ')
-			{
 				if (((i > 0 && j > 0) && map[i][j + 1] && \
 				map[i][j - 1] && map[i + 1] && map[i - 1]) && \
 				((map[i][j + 1] == '0' || is_player(map[i][j + 1])) || \
@@ -116,37 +116,11 @@ void	validate_map(char **map)
 				(map[i + 1][j] == '0' || is_player(map[i + 1][j])) || \
 				(map[i - 1][j] == '0' || is_player(map[i - 1][j]))))
 					error("Error\nWrong map format\n");
-			}
 			if (map[i][j] == '0')
 				check_around(map, i, j);
-			if (map[i][j] == 'N' | map[i][j] == 'W' | map[i][j] == 'S' | map[i][j] == 'E')
+			if (map[i][j] == 'N' | map[i][j] == 'W' | \
+			map[i][j] == 'S' | map[i][j] == 'E')
 				check_player_around(map, i, j);
-			j++;
 		}
-		i++;
 	}
-}
-
-void	check_double(char **map)
-{
-	int		i;
-	int		j;
-	int		count;
-
-	i = 0;
-	count = 0;
-	while (map[i])
-	{
-		j = 0;
-		while (map[i][j])
-		{
-			if (map[i][j] == 'N' || map[i][j] == 'S' || \
-			map[i][j] == 'E' || map[i][j] == 'W')
-				count++;
-			j++;
-		}
-		i++;
-	}
-	if (count != 1)
-		error("Error\nWrong map format\n");
 }

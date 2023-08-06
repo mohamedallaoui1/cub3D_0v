@@ -12,29 +12,46 @@
 
 #include "./includes/cub3D.h"
 
+void	check_next_door(t_mlx *mlx)
+{
+	int	x;
+	int	y;
+
+	x = (int)((mlx->player->center_x + TILE_SIZE * \
+	cos(mlx->player->player_angle)) / TILE_SIZE);
+	y = (int)((mlx->player->center_y + TILE_SIZE * \
+	sin(mlx->player->player_angle)) / TILE_SIZE);
+	if (mlx->pars->map[y][x] == '2')
+		mlx->pars->map[y][x] = '3';
+	else if (mlx->pars->map[y][x] == '3')
+		mlx->pars->map[y][x] = '2';
+	mlx->player->keys.key_space = 0;
+}
+
 void	handle_events(t_mlx *mlx)
 {
 	double	rotate;
 	double	percent;
 	double	m_dist;
 
-	m_dist = abs(mlx->mouse.x  - (WIDTH/2 + SAFE_AREA * mlx->mouse.which_side));
+	m_dist = abs(mlx->mouse.x - (WIDTH / 2 + \
+	SAFE_AREA * mlx->mouse.which_side));
 	percent = m_dist / (WIDTH / 2);
-	if (mlx->player->keys.key_left || mlx->player->keys.key_right || percent > 1)
+	if (mlx->player->keys.key_space)
+		check_next_door(mlx);
+	if (mlx->player->keys.key_left || \
+	mlx->player->keys.key_right || percent > 1)
 		percent = 1;
 	rotate = ROT_SPEED;
 	if (mlx->player->keys.key_w || mlx->player->keys.key_s)
 		up_down(mlx);
 	if (mlx->player->keys.key_a || mlx->player->keys.key_d)
 		left_right(mlx);
-	if (mlx->player->keys.key_left ||
+	if (mlx->player->keys.key_left || \
 		(mlx->mouse.which_side == -1 && !mlx->player->keys.key_right))
 		mlx->player->player_angle
-			= normalize_angle(mlx->player->player_angle  - rotate * percent);
-	if (mlx->player->keys.key_space)
-		;
-		// check the line of the player if its in the door cell and change it to 0 (bye transport gha ymchi)
-	else if (mlx->player->keys.key_right ||  mlx->mouse.which_side)
+			= normalize_angle(mlx->player->player_angle - rotate * percent);
+	else if (mlx->player->keys.key_right || mlx->mouse.which_side)
 		mlx->player->player_angle
 			= normalize_angle(mlx->player->player_angle + rotate * percent);
 }
@@ -63,7 +80,6 @@ void	wsa(t_mlx *mlx, int keycode)
 
 int	control_key(int keycode, t_mlx *mlx)
 {
-	printf ("%d\n", keycode);
 	wsa(mlx, keycode);
 	if (keycode == KEY_D)
 	{

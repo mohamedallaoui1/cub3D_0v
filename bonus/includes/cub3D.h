@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/06 13:56:17 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/08 22:04:23 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 # define CUB3D_H
 # include <stdio.h>
 # include <unistd.h>
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 # include <mlx.h>
+# include <pthread.h>
 # include <math.h>
 # define WALL_MULIP 3
-# define MOVE_SPEED 3	// px per frame  (60fps is the max i think)
-# define ROT_SPEED 0.05 // 0.05 radiant 
+# define MOVE_SPEED 5	// px per frame  (60fps is the max i think)
+# define ROT_SPEED 0.07 // 0.05 radiant 
 # define LINE_LEN 30
 # define PROJ_DIST 277 // the bigger the number the bigger the walls look
 # define TILE_SIZE 32.0
@@ -151,30 +152,32 @@ typedef struct s_mouse
 
 typedef struct s_sprite
 {
-	int		x;
-	int		y;
-	char	*sprite_path;
-	int		width;
-	int		height;
-	t_data	sprite;
+	int				x;
+	int				y;
+	char			*sprite_path;
+	int				width;
+	int				height;
+	t_data			sprite;
 }		t_sprite;
 
 typedef struct s_mlx
 {
-	void		*mlx;
-	void		*win;
-	int			width;
-	int			height;
-	t_data		img;
-	t_data		textures[5];
-	t_pars		*pars;
-	t_vars		*vars;
-	t_player	*player;
-	t_sprite	sprites[FRAME_NUM];
-	int			start;
-	int			animation_frame;
-	t_mouse		mouse;
-	t_door		*door;
+	void			*mlx;
+	void			*win;
+	int				width;
+	int				height;
+	t_data			img;
+	t_data			textures[5];
+	t_pars			*pars;
+	t_vars			*vars;
+	t_player		*player;
+	t_sprite		sprites[FRAME_NUM];
+	int				start;
+	int				animation_frame;
+	pthread_mutex_t	*mutex;
+	pthread_t		thread;
+	t_mouse			mouse;
+	t_door			*door;
 }		t_mlx;
 
 void			texture_parsing(t_pars *pars, char **file);
@@ -227,5 +230,9 @@ void			keys_init(t_mlx *mlx);
 void			draw_minimap(t_mlx *mlx);
 void			init_sprites(t_mlx *mlx);
 void			draw_gun(t_mlx *mlx);
-void		    init_sprites(t_mlx *mlx);
+void			init_sprites(t_mlx *mlx);
+void			*animate(void *mlx);
+int				animation_control(int button, int x, int y, t_mlx *mlx);
+void			remove_spaces(char **p);
+int				is_map(char *file);
 #endif

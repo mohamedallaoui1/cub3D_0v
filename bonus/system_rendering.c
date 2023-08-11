@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   system_rendering.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 10:47:59 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/06 14:01:59 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/06 20:38:27 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,29 +44,22 @@ void	minimap(t_mlx *mlx)
 
 int	magic(t_mlx *mlx)
 {
-    mlx_clear_window(mlx->mlx, mlx->win);
-    handle_events(mlx);
-    castrays(mlx);
-    minimap(mlx);
-    mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
-	if (mlx->start == 1)
-	{
-		mlx->animation_frame++;
-		if (mlx->animation_frame == 42)
-		{
-			mlx->start = 0;
-			mlx->animation_frame = 0;
-		}
-	}
+	mlx_clear_window(mlx->mlx, mlx->win);
+	handle_events(mlx);
+	castrays(mlx);
+	minimap(mlx);
+	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
 	draw_gun(mlx);
-    return (0);
+	return (0);
 }
 
 t_data	*get_texture(t_mlx *mlx, int id)
 {
-	if (mlx->pars->map[(int)((get_wall_hit(mlx, id).y - 0.001 * mlx->player->rays[id].facing_up )
-		/ TILE_SIZE)][(int)((get_wall_hit(mlx, id).x - 0.001 * mlx->player->rays[id].facing_left)
-		/ TILE_SIZE)] == '2')
+	if (mlx->pars->map[(int) \
+	((get_wall_hit(mlx, id).y - 0.001 * mlx->player->rays[id].facing_up) \
+	/ TILE_SIZE)][(int) \
+	((get_wall_hit(mlx, id).x - 0.001 * mlx->player->rays[id].facing_left) \
+	/ TILE_SIZE)] == '2')
 		return (&mlx->textures[4]);
 	if (mlx->player->rays[id].is_hor)
 	{

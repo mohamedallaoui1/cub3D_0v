@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 10:32:53 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/05 23:21:20 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/08 16:29:41 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,24 @@ void	error(char *str)
 
 int	check_char(char **file, int i, int j)
 {
-	if (file[i][j] == 'N' && file[i][j + 1] == 'O')
+	if (file[i][j] == '\0' || (file[i][j] == 'N' && file[i][j + 1] == 'O'))
 		return (1);
-	if (file[i][j] == 'S' && file[i][j + 1] == 'O')
+	if (file[i][j] == '\0' || (file[i][j] == 'S' && file[i][j + 1] == 'O'))
 		return (1);
-	if (file[i][j] == 'W' && file[i][j + 1] == 'E')
+	if (file[i][j] == '\0' || (file[i][j] == 'W' && file[i][j + 1] == 'E'))
 		return (1);
-	if (file[i][j] == 'E' && file[i][j + 1] == 'A')
+	if (file[i][j] == '\0' || (file[i][j] == 'E' && file[i][j + 1] == 'A'))
 		return (1);
-	if (file[i][j] == 'F' && file[i][j + 1] == ' ')
+	if (file[i][j] == '\0' || (file[i][j] == 'F' && file[i][j + 1] == ' '))
 		return (1);
-	if (file[i][j] == 'C' && file[i][j + 1] == ' ')
+	if (file[i][j] == '\0' || (file[i][j] == 'C' && file[i][j + 1] == ' '))
 		return (1);
-	if (file[i][j] == '1' && (file[i][j + 1] == '1' || file[i][j + 1] == '0' ||
+	if (file[i][j] == '\0' || (file[i][j] == '1' && \
+	(file[i][j + 1] == '1' || file[i][j + 1] == '0' ||
 	file[i][j + 1] == ' ' || file[i][j + 1] == '\0' \
 	|| file[i][j + 1] == 'N' || \
 	file[i][j + 1] == 'S' || file[i][j + 1] == 'W' \
-	|| file[i][j + 1] == 'E' || file[i][j + 1] == '2' || \
-	file[i][j + 1] == 'c'))
+	|| file[i][j + 1] == 'E' || file[i][j + 1] == '2')))
 		return (1);
 	return (0);
 }
@@ -99,7 +99,7 @@ void	map_pars(t_pars *pars, char **file)
 	map = NULL;
 	while (file[i])
 	{
-		if (ft_strncmp(file[i], "1", 1) == 0)
+		if (is_map(file[i]))
 		{
 			map = get_map(file + i);
 			break ;

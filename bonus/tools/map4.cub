@@ -1,19 +1,10 @@
-NO ./textures/tt1.xpm
-SO ./textures/metal_brick.xpm
-WE ./textures/wood_wall.xpm
-EA ./textures/tt4.xpm
+         NO ./textures/tt1.xpm
+         SO ./textures/metal_brick.xpm
+         WE ./textures/wood_wall_2.xpm
+         EA ./textures/tt4.xpm
 
-F 150,150,150
+F 150   ,150  ,150
 C 150 ,50,30
-
-11111111111111111
-1000000S0011100001
-100000000021100111
-100000000011001
-1110000000020001
-1110000000010001
-1110000000101001
-1010000000001001
-1010000000000101
-1000000000000001
-1111111111111111
+ 1
+1N1
+ 1

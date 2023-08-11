@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 10:47:59 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/01 15:02:23 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/08 21:58:56 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	project_wall(t_mlx *mlx, int id)
 			my_mlx_pixel_put(mlx, id, i,
 				shading(get_pixel_color(
 						get_texture(mlx, id), val, (count++ / p_wall_h)
-						* mlx->textures[0].img_height),
+						* get_texture(mlx, id)->img_height),
 					mlx->player->rays[id].dist / SHADE_RANGE));
 		else
 			my_mlx_pixel_put(mlx, id, i, shading(

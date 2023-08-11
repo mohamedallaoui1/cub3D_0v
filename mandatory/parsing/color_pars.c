@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 07:22:03 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/07/31 18:16:04 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/08 22:00:54 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,21 @@ char	*remove_spaces_between_comma(char *str)
 	int		i;
 	int		j;
 	char	*tmp;
+	int		count;
 
 	i = 0;
 	j = 0;
-	tmp = malloc(sizeof(char) * ft_strlen(str) + 1);
+	count = 0;
+	while (str[i])
+		if (str[i++] != ' ')
+			count++;
+	tmp = malloc(sizeof(char) * count + 1);
+	i = 0;
 	while (str[i])
 	{
-		if (str[i] == ' ' && (str[i + 1] == ',' || str[i - 1] == ','))
-			i++;
-		tmp[j] = str[i];
+		if (str[i] != ' ')
+			tmp[j++] = str[i];
 		i++;
-		j++;
 	}
 	tmp[j] = '\0';
 	free(str);
@@ -64,11 +68,9 @@ int	*get_color_2(char *tmp, char **rgb)
 	while (tmp[i])
 		if (tmp[i++] == ',')
 			count++;
-	if (count != 2)
-		error("Error\nWrong color format\n");
+	(count != 2) && (error("Error\nWrong color format\n"), 0);
 	rgb = ft_split(tmp, ',');
-	free(tmp);
-	check_rgb(rgb);
+	(free(tmp), check_rgb(rgb));
 	if (rgb[0] == NULL || rgb[1] == NULL || rgb[2] == NULL)
 		error("Error\nWrong color format\n");
 	color = malloc(sizeof(int) * 3);
@@ -78,7 +80,10 @@ int	*get_color_2(char *tmp, char **rgb)
 	if (color[0] < 0 || color[0] > 255 || color[1] < 0 || \
 	color[1] > 255 || color[2] < 0 || color[2] > 255)
 		error("Error\nWrong color format\n");
-	return (color);
+	i = 0;
+	while (rgb && rgb[i])
+		free(rgb[i++]);
+	return ((rgb) && (free(rgb), 0), color);
 }
 
 int	*get_color(char *line, char c)
@@ -99,8 +104,7 @@ int	*get_color(char *line, char c)
 	while (line[i] && (line[i] == c || line[i] == ' '))
 		i++;
 	rgb = NULL;
-	tmp = NULL;
-	tmp = ft_strdup(ft_substr(line, i, ft_strlen(line + i)));
+	tmp = ft_substr(line, i, ft_strlen(line + i));
 	tmp = remove_spaces_between_comma(tmp);
 	return (get_color_2(tmp, rgb));
 }

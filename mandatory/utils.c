@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:27:16 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 14:16:10 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/08 16:21:17 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ double	*player_pos(char **map)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == 'N' || map[i][j] == 'S' ||
-				map[i][j] == 'E' || map[i][j] == 'W')
+			if (map[i][j] == 'N' || map[i][j] == 'S' \
+			|| map[i][j] == 'E' || map[i][j] == 'W')
 			{
 				arr[0] = (double)i;
 				arr[1] = (double)j;

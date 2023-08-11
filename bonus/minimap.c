@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 23:15:59 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/05 23:18:53 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/08 16:26:55 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,21 @@ void	draw_square(t_mlx *mlx, int x, int y, int color)
 
 void	draw(t_mlx *mlx, int x, int y)
 {
-	int	map_start_x;
-	int	map_start_y;
+	float	map_start_x;
+	float	map_start_y;
+	float	map_tile_x;
+	float	map_tile_y;
 
 	map_start_y = mlx->player->center_y - MAP_SIZE / 2;
 	map_start_x = mlx->player->center_x - MAP_SIZE / 2;
-	if ((int)((map_start_x + x) / TILE_SIZE) >= 0 \
-	&& (int)((map_start_x + x) / TILE_SIZE) < \
-	mlx->vars->map_w && \
-	(int)((map_start_y + y) / TILE_SIZE) >= 0 \
-	&& (int)(((map_start_y + y) / TILE_SIZE)) < \
-	mlx->vars->map_h)
+	map_tile_x = (x + map_start_x) / TILE_SIZE;
+	map_tile_y = (y + map_start_y) / TILE_SIZE;
+	if (map_tile_x >= 0 && map_tile_x < mlx->vars->map_w && \
+		map_tile_y >= 0 && map_tile_y < mlx->vars->map_h)
 	{
-		if (mlx->pars->map[(int)((map_start_y + y) / TILE_SIZE)] \
-		[(int)((map_start_x + x) / TILE_SIZE)] == '1')
+		if (mlx->pars->map[(int)map_tile_y][(int)map_tile_x] == '1')
 			draw_square(mlx, x, y, WALL_COLOR);
-		else if (mlx->pars->map[(int)((map_start_y + y) / TILE_SIZE)] \
-		[(int)((map_start_x + x) / TILE_SIZE)] == '2')
+		else if (mlx->pars->map[(int)map_tile_y][(int)map_tile_x] == '2')
 			draw_square(mlx, x, y, DOOR_COLOR);
 		else
 			draw_square(mlx, x, y, GROUND_COLOR);

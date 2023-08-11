@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 23:21:42 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/05 23:22:57 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/08 16:28:48 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,27 @@ void	validate_map_norm(char **map, int i, int j)
 		check_player_around(map, i, j);
 	if (map[i][j] == '2')
 		check_door_around(map, i, j);
+}
+
+void	remove_spaces(char **p)
+{
+	int		i;
+	int		j;
+	char	*tmp;
+
+	i = 0;
+	while (p[i])
+	{
+		j = 0;
+		if (p[i][0] == ' ')
+			while (p[i][j] == ' ')
+				j++;
+		if (p[i][j] != '1' && p[i][j] != '\0')
+		{
+			tmp = p[i];
+			p[i] = ft_strdup(tmp + j);
+			free(tmp);
+		}
+		i++;
+	}
 }

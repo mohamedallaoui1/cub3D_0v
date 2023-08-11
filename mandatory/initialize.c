@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 12:55:20 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 12:59:18 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/08 15:08:31 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ double	init_vars(t_mlx *mlx, int id, int *p_wall_h, double *count)
 		val = get_wall_hit(mlx, id).y / TILE_SIZE;
 	val = (val - (int)val) * get_texture(mlx, id)->img_width;
 	*count = 0;
-	*p_wall_h = round((TILE_SIZE / mlx->player->rays[id].dist) * PROJ_DIST);
+	*p_wall_h = ((TILE_SIZE / mlx->player->rays[id].dist) * \
+	PROJ_DIST) * WALL_MULIP;
 	if (*p_wall_h > HEIGHT)
 		*count = (*p_wall_h - HEIGHT) / 2;
 	return (val);

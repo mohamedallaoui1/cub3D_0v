@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:15:18 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/06 13:53:41 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/06 20:28:41 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,6 @@ int	mouse_control(int x, int y, t_mlx *mlx)
 	return (0);
 }
 
-
-int	animation_control(int button, int x, int y, t_mlx *mlx)
-{
-	(void)x;
-	(void)y;
-	if (button == 1)
-		mlx->start = 1;
-	return (0);
-}
-
 int	main(int ac, char **av)
 {
 	t_mlx		*mlx;
@@ -85,6 +75,9 @@ int	main(int ac, char **av)
 	mlx = init(arr, ac, av);
 	mlx->start = 0;
 	mlx->animation_frame = 0;
+	mlx->mutex = malloc(sizeof(pthread_mutex_t));
+	pthread_create(&mlx->thread, NULL, animate, mlx);
+	pthread_mutex_init(mlx->mutex, NULL);
 	mlx->player->rays = malloc(WIDTH * sizeof(t_rays));
 	mlx_hook(mlx->win, 17, 0L, close_window, mlx);
 	mlx_hook(mlx->win, 6, 0L, mouse_control, mlx);

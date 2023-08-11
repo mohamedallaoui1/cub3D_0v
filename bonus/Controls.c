@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Controls.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:22:23 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/06 13:39:38 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/06 17:16:44 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	handle_events(t_mlx *mlx)
 
 	m_dist = abs(mlx->mouse.x - (WIDTH / 2 + \
 	SAFE_AREA * mlx->mouse.which_side));
-	percent = m_dist / (WIDTH / 2);
+	percent = m_dist / (WIDTH / 3);
 	if (mlx->player->keys.key_space)
 		check_next_door(mlx);
 	if (mlx->player->keys.key_left || \

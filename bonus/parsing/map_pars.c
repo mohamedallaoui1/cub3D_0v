@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 19:19:00 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/06 10:37:58 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/08 16:27:15 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,10 @@ int	is_player(char c)
 
 void	check_around(char **map, int i, int j)
 {
-	if ((i <= 0 || j <= 0) || ((i > 0 && j > 0) && \
+	if ((map[i][j] == '0' || is_player(map[i][j])) && \
+	((i <= 0 || j <= 0) || ((i > 0 && j > 0) && \
 	((map[i][j + 1] == ' ' || map[i][j + 1] == '\0') || \
 	(!map[i + 1] || map[i + 1][j] == ' ' || map[i + 1][j] == '\0') || \
-	(!map[i - 1] || map[i - 1][j] == ' ' || map[i - 1][j] == '\0'))))
+	(!map[i - 1] || map[i - 1][j] == ' ' || map[i - 1][j] == '\0')))))
 		error("Error\nWrong map format\n");
 }

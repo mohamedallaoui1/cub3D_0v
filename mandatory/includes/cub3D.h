@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:22:32 by mallaoui          #+#    #+#             */
-/*   Updated: 2023/08/06 13:35:39 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/08 22:04:14 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,25 @@
 # define CUB3D_H
 # include <stdio.h>
 # include <unistd.h>
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 # include <mlx.h>
 # include <math.h>
-# define MOVE_SPEED 3
-# define ROT_SPEED 0.05
+# define MOVE_SPEED 5
+# define ROT_SPEED 0.04
 # define LINE_LEN 30
-# define PROJ_DIST 400 // the bigger the number the bigger the walls look
-# define TILE_SIZE 32.0
+# define PROJ_DIST 277 // the bigger the number the bigger the walls look
+# define TILE_SIZE 64.0
 # define FOV_ANGLE 1.0471975512 //(60 * (3.1415926535897 / 180))
-# define SHADE_RANGE 400
+# define SHADE_RANGE 800
 # define LIMIT 5
 # define LINE_COLOR 0xfff
 # define PLAYER_COLOR 0xff0000
 # define WALL_COLOR 0x943a5b
 # define SPACE_COLOR 0x000000
 # define GROUND_COLOR 0xC3CB6E
-# define WIDTH 2000
-# define HEIGHT 1000
+# define WIDTH 1000
+# define WALL_MULIP 3
+# define HEIGHT 700
 # define RIGHT -1
 # define LEFT  1
 # define KEY_W 13
@@ -173,4 +174,6 @@ char			**get_map(char **file);
 void			check_map(char **map);
 void			validate_map(char **map);
 void			check_double(char **map);
+void			remove_spaces(char **p);
+int				is_map(char *file);
 #endif

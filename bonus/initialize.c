@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 12:55:20 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/06 13:56:08 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/08 22:13:07 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	texture_init(t_mlx *mlx)
 
 	i = -1;
 	strs = (char *[5]){mlx->pars->no, mlx->pars->so,
-		mlx->pars->ea, mlx->pars->we, "./textures/door.xpm"};
+		mlx->pars->ea, mlx->pars->we, "./textures_bonus/door.xpm"};
 	while (++i < 5)
 	{
 		printf("xpm file (%s) : loading...\n", strs[i]);

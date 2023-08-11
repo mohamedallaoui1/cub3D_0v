@@ -6,7 +6,7 @@
 /*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 10:29:24 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/07/31 11:37:40 by oidboufk         ###   ########.fr       */
+/*   Updated: 2023/08/08 16:28:15 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,9 @@ void	remove_newline(char **file)
 void	parsing(t_pars *pars, int ac, char **av)
 {
 	char	**file;
+	int		i;
 
+	i = 0;
 	if (ac < 2)
 		error("Error\nNo input file\n");
 	if (ac > 2)
@@ -120,8 +122,16 @@ void	parsing(t_pars *pars, int ac, char **av)
 		error("Error\nWrong file extension\n");
 	file = get_content(av[1]);
 	remove_newline(file);
+	remove_spaces(file);
 	check_file_general_errors(file);
 	texture_parsing(pars, file);
 	color_pars(pars, file);
 	map_pars(pars, file);
+	while (file && file[i])
+		free(file[i++]);
+	if (file)
+		free(file);
+	i = 0;
+	while (pars->map[i])
+		printf("%s\n", pars->map[i++]);
 }

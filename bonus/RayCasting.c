@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RayCasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mallaoui <mallaoui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oidboufk <oidboufk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:08:39 by oidboufk          #+#    #+#             */
-/*   Updated: 2023/08/06 13:50:19 by mallaoui         ###   ########.fr       */
+/*   Updated: 2023/08/06 20:30:40 by oidboufk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,6 @@ void	castrays(t_mlx *mlx)
 		project_wall(mlx, i);
 		rayangle = normalize_angle(rayangle + FOV_ANGLE / (double)WIDTH);
 	}
-}
-
-void	draw_gun(t_mlx *mlx)
-{
-	int	id;
-	int	w;
-	int	h;
-
-	id = mlx->animation_frame;
-	w = WIDTH - mlx->sprites[id % FRAME_NUM].sprite.img_width;
-	h = HEIGHT - mlx->sprites[id % FRAME_NUM].sprite.img_height;
-	if (w <= 0 || h <= 0)
-		(printf("the WIDTH or HEIGHT are smaller than possible recommended (1000/700)\n"), exit(2));
-	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->sprites[id % FRAME_NUM].sprite.img,
-		WIDTH - mlx->sprites[id % FRAME_NUM].sprite.img_width, h);
 }
 
 void	get_ver(t_mlx *mlx, int id)
